@@ -1,0 +1,13 @@
+{
+  "name": "club-performance-and-formation-optimizer",
+  "private": true,
+  "version": "0.1.0",
+  "description": "AI-based football club player performance analysis and weekly formation optimization system",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "check:structure": "node -e \"console.log('Phase 0 structure ready')\""
+  }
+}

@@ -1,0 +1,37 @@
+# Node
+node_modules/
+dist/
+build/
+coverage/
+*.log
+
+# Env
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# Prisma
+generated/
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Data artifacts
+data/processed/*
+data/synthetic/*
+!data/processed/.gitkeep
+!data/synthetic/.gitkeep
+
+# Keep raw dataset policy controlled later
+data/raw/*
+!data/raw/.gitkeep
