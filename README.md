@@ -63,6 +63,17 @@ This project develops a web-based decision-support system for a single football 
 - `infra/` contains Docker and database environment assets
 - `data/` contains raw, processed, and synthetic datasets
 
+## Design Documents
+- `docs/requirements-specification.md`
+- `docs/use-cases.md`
+- `docs/system-architecture.md`
+- `docs/erd.md`
+- `docs/domain-model.md`
+- `docs/recommendation-workflow.md`
+- `docs/non-functional-requirements.md`
+- `docs/api-boundary.md`
+- `docs/image-reference-phase-1.md`
+
 ## Contribution Rules
 - Keep the scope locked to one club and weekly recommendations
 - Prioritize explainability before machine learning complexity
@@ -71,4 +82,4 @@ This project develops a web-based decision-support system for a single football 
 - Document any scope changes before implementation
 
 ## Status
-Phase 0 in progress.
+Phase 1 documentation completed. The repository now includes text-only requirements, architecture, ERD, domain, and workflow design documents, with image placeholders tracked separately for later insertion.
