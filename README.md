@@ -1,0 +1,74 @@
+# AI-Based Football Club Player Performance Analysis and Weekly Formation Optimization System
+
+## Overview
+This project is a web-based intelligent decision-support system for one football club. It analyzes player performance and recommends an optimal weekly formation and starting lineup for the coach/admin.
+
+## Academic Focus
+The system is designed as a realistic, explainable, and finishable final-year project. It prioritizes maintainability, transparency, and technical defensibility over unnecessary complexity.
+
+## Official Academic Title
+AI-Based Football Club Player Performance Analysis and Weekly Formation Optimization System for Weekly Match Decision Support
+
+## Internal Product Title
+Club Performance and Formation Optimizer
+
+## Academic Problem Statement
+This project develops a web-based decision-support system for a single football club that analyzes weekly player performance indicators and recommends an explainable starting lineup and formation for upcoming matches.
+
+## Strict Scope
+- One football club only
+- Maximum 25 players in demo dataset
+- Weekly recommendations only
+- No live tracking
+- No video analysis
+- No GPS or wearable data
+- No transfer market logic
+- No scouting features
+- Coach/Admin is the only user
+- Recommendations must remain explainable
+
+## Core Technology Stack
+- Frontend: React 18, Vite, TypeScript, Tailwind CSS v4, Recharts, React Router v7, TanStack Query, Lucide React
+- Backend: Node.js 20, Express, TypeScript, Prisma ORM, PostgreSQL, Zod, JWT, Helmet
+- AI/ML: Python 3.11, FastAPI, scikit-learn, pandas, joblib
+- Deployment: Docker Compose
+
+## Development Philosophy
+1. Build a fully working system without AI first
+2. Add weighted rule-based intelligence
+3. Add formation optimization logic
+4. Add optional ML enhancement for academic value
+5. Polish UI, testing, and documentation
+
+## Planned Phases
+- Phase 0: Project definition, academic framing, and repo setup
+- Phase 1: Requirements analysis, system design, ERD, and architecture
+- Phase 2: Dataset strategy and data preparation
+- Phase 3: Git workflow discipline and monorepo structure
+- Phase 4: Local environment setup
+- Phase 5: Database modeling with Prisma
+- Phase 6: Backend API development
+- Phase 7: Rule-based recommendation engine
+- Phase 8: ML layer with FastAPI
+- Phase 9: Frontend UI
+- Phase 10: Frontend-backend integration
+- Phase 11: Testing and debugging
+- Phase 12: Documentation and academic mapping
+- Phase 13: Final polishing and defense preparation
+
+## Repository Structure
+- `apps/` contains the frontend, backend API, and Python AI service
+- `packages/` contains shared code, configuration, and reusable UI utilities
+- `docs/` contains academic and engineering documents
+- `infra/` contains Docker and database environment assets
+- `data/` contains raw, processed, and synthetic datasets
+
+## Contribution Rules
+- Keep the scope locked to one club and weekly recommendations
+- Prioritize explainability before machine learning complexity
+- Prefer TypeScript for JavaScript-facing services and tooling
+- Keep business logic in service layers, not controllers or UI components
+- Document any scope changes before implementation
+
+## Status
+Phase 0 in progress.
