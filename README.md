@@ -74,6 +74,14 @@ This project develops a web-based decision-support system for a single football 
 - `docs/api-boundary.md`
 - `docs/image-reference-phase-1.md`
 
+## Data Strategy Documents
+- `docs/dataset-strategy.md`
+- `docs/data-preparation-plan.md`
+- `docs/synthetic-data-model.md`
+- `docs/demo-squad-plan.md`
+- `docs/data-dictionary.md`
+- `docs/seeding-strategy.md`
+
 ## Contribution Rules
 - Keep the scope locked to one club and weekly recommendations
 - Prioritize explainability before machine learning complexity
@@ -82,4 +90,4 @@ This project develops a web-based decision-support system for a single football 
 - Document any scope changes before implementation
 
 ## Status
-Phase 1 documentation completed. The repository now includes text-only requirements, architecture, ERD, domain, and workflow design documents, with image placeholders tracked separately for later insertion.
+Phase 2 documentation completed. The repository now includes requirements, architecture, and dataset-planning documents covering the hybrid data strategy, synthetic weekly metrics, demo squad design, and reproducible seeding approach.
