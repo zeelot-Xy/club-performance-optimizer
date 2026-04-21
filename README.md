@@ -82,6 +82,14 @@ This project develops a web-based decision-support system for a single football 
 - `docs/data-dictionary.md`
 - `docs/seeding-strategy.md`
 
+## Repository Workflow Documents
+- `docs/monorepo-structure.md`
+- `docs/git-branching-strategy.md`
+- `docs/commit-and-pr-guidelines.md`
+- `docs/folder-ownership.md`
+- `docs/configuration-policy.md`
+- `docs/naming-conventions.md`
+
 ## Contribution Rules
 - Keep the scope locked to one club and weekly recommendations
 - Prioritize explainability before machine learning complexity
@@ -90,4 +98,4 @@ This project develops a web-based decision-support system for a single football 
 - Document any scope changes before implementation
 
 ## Status
-Phase 2 documentation completed. The repository now includes requirements, architecture, and dataset-planning documents covering the hybrid data strategy, synthetic weekly metrics, demo squad design, and reproducible seeding approach.
+Phase 3 documentation completed. The repository now includes requirements, data strategy, and repository workflow documents covering monorepo boundaries, Git discipline, folder ownership, configuration policy, and naming conventions.
