@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+:root {
+  --color-primary: #0f2c22;
+  --color-surface: #f8faf7;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-surface);
+  color: var(--color-primary);
+  font-family: "Segoe UI", "Inter", sans-serif;
+}
+
+.grid-background {
+  background-color: var(--color-surface);
+  background-image:
+    linear-gradient(rgba(15, 44, 34, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 44, 34, 0.05) 1px, transparent 1px),
+    radial-gradient(circle at top left, rgba(15, 44, 34, 0.08), transparent 40%);
+  background-position: center;
+  background-size: 34px 34px, 34px 34px, auto;
+}
