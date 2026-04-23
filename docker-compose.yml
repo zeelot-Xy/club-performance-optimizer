@@ -1,0 +1,58 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: club-performance-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: club_performance_optimizer
+      POSTGRES_USER: club_admin
+      POSTGRES_PASSWORD: club_admin_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: ./apps/api
+    container_name: club-performance-api
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      - ai-service
+    environment:
+      NODE_ENV: development
+      PORT: 8000
+      DATABASE_URL: postgresql://club_admin:club_admin_password@postgres:5432/club_performance_optimizer
+      JWT_SECRET: development_jwt_secret_change_me
+      AI_SERVICE_URL: http://ai-service:8001
+      FRONTEND_URL: http://localhost:5173
+    ports:
+      - "8000:8000"
+
+  ai-service:
+    build:
+      context: ./apps/ai-service
+    container_name: club-performance-ai-service
+    restart: unless-stopped
+    environment:
+      AI_SERVICE_PORT: 8001
+      MODEL_NAME: baseline_rule_support
+    ports:
+      - "8001:8001"
+
+  web:
+    build:
+      context: ./apps/web
+    container_name: club-performance-web
+    restart: unless-stopped
+    depends_on:
+      - api
+    environment:
+      VITE_API_URL: http://localhost:8000/api/v1
+      VITE_APP_NAME: Club Performance and Formation Optimizer
+    ports:
+      - "5173:5173"
+
+volumes:
+  postgres_data:

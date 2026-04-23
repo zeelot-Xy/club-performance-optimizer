@@ -8,6 +8,12 @@
     "packages/*"
   ],
   "scripts": {
-    "check:structure": "node -e \"console.log('Phase 0 structure ready')\""
+    "check:structure": "node -e \"console.log('Project structure ready')\"",
+    "dev:web": "npm run dev --workspace @club/web",
+    "dev:api": "npm run dev --workspace @club/api",
+    "dev:docker": "docker compose up --build",
+    "dev:docker:detached": "docker compose up --build -d",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f"
   }
 }
