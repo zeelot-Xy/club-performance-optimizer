@@ -90,6 +90,17 @@ This project develops a web-based decision-support system for a single football 
 - `docs/configuration-policy.md`
 - `docs/naming-conventions.md`
 
+## Local Environment Documents
+- `docs/local-environment-setup.md`
+- `docs/phases/phase-4-checklist.md`
+
+## Local Run Overview
+- `docker compose up --build` starts PostgreSQL, backend API, AI service, and frontend together
+- Frontend runs on `http://localhost:5173`
+- Backend runs on `http://localhost:8000`
+- AI service runs on `http://localhost:8001`
+- PostgreSQL runs on `localhost:5432`
+
 ## Contribution Rules
 - Keep the scope locked to one club and weekly recommendations
 - Prioritize explainability before machine learning complexity
@@ -98,4 +109,4 @@ This project develops a web-based decision-support system for a single football 
 - Document any scope changes before implementation
 
 ## Status
-Phase 3 documentation completed. The repository now includes requirements, data strategy, and repository workflow documents covering monorepo boundaries, Git discipline, folder ownership, configuration policy, and naming conventions.
+Phase 4 local environment setup completed. The repository now includes the first runnable frontend, backend, AI service, Docker Compose orchestration, and setup documentation for local development.
