@@ -2,6 +2,7 @@ import type { Request, Response } from "express";
 
 import { HTTP_STATUS } from "../../config/http.js";
 import { getRouteParam } from "../../lib/get-route-param.js";
+import { generateRecommendationSchema } from "./recommendation.schema.js";
 import { recommendationService } from "./recommendation.service.js";
 
 export const recommendationController = {
@@ -20,5 +21,15 @@ export const recommendationController = {
     const matchWeekId = getRouteParam(request.params.matchWeekId, "matchWeekId");
     const recommendations = await recommendationService.getByMatchWeek(matchWeekId);
     response.status(HTTP_STATUS.OK).json(recommendations);
+  },
+
+  async generate(request: Request, response: Response) {
+    const payload = generateRecommendationSchema.parse(request.body);
+    const recommendation = await recommendationService.generate(
+      payload.matchWeekId,
+      request.auth!.userId,
+    );
+
+    response.status(HTTP_STATUS.CREATED).json(recommendation);
   },
 };

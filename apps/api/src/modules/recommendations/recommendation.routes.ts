@@ -9,6 +9,7 @@ export const recommendationRoutes = Router();
 recommendationRoutes.use(authMiddleware);
 
 recommendationRoutes.get("/", asyncHandler(recommendationController.list));
+recommendationRoutes.post("/generate", asyncHandler(recommendationController.generate));
 recommendationRoutes.get(
   "/match-week/:matchWeekId",
   asyncHandler(recommendationController.getByMatchWeek),
