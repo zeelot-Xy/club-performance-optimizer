@@ -114,6 +114,10 @@ This project develops a web-based decision-support system for a single football 
 - `docs/frontend-ui-design.md`
 - `docs/phases/phase-9-checklist.md`
 
+## Frontend Integration Documents
+- `docs/frontend-backend-integration.md`
+- `docs/phases/phase-10-checklist.md`
+
 ## Local Run Overview
 - `docker compose up --build` starts PostgreSQL, backend API, AI service, and frontend together
 - Frontend runs on `http://localhost:5173`
@@ -133,4 +137,4 @@ This project develops a web-based decision-support system for a single football 
 - Document any scope changes before implementation
 
 ## Status
-Phase 9 frontend UI development completed. The repository now includes the routed Coach/Admin interface, mock-backed dashboard and recommendation views, a deep relic green tactical design system, and a custom football pitch visualization ready for Phase 10 integration.
+Phase 10 frontend-backend integration completed. The repository now includes authenticated TanStack Query hooks, protected frontend routes, live players and match week views, and a recommendation page that fetches and triggers backend generation directly.
