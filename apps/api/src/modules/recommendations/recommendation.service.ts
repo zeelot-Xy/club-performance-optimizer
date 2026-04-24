@@ -1,6 +1,7 @@
 import { Prisma } from "@prisma/client";
 
 import { HTTP_STATUS } from "../../config/http.js";
+import { aiServiceClient } from "../../lib/ai-service.js";
 import { HttpError } from "../../lib/http-error.js";
 import { prisma } from "../../lib/prisma.js";
 import {
@@ -74,6 +75,56 @@ export const recommendationService = {
     return recommendations.map(formatRecommendation);
   },
 
+  async buildMlSupportSummary(
+    selectedPlayers: Prisma.RecommendationGetPayload<{
+      include: typeof recommendationInclude;
+    }>["recommendationPlayers"],
+    weeklyPerformances: Array<
+      Prisma.WeeklyPerformanceGetPayload<{
+        include: {
+          player: true;
+        };
+      }>
+    >,
+  ) {
+    try {
+      const weeklyPerformanceByPlayerId = new Map(
+        weeklyPerformances.map((record) => [record.playerId, record] as const),
+      );
+
+      const predictionResults = await Promise.all(
+        selectedPlayers
+          .filter((playerEntry) => playerEntry.isSelected)
+          .map(async (playerEntry) => {
+            const weeklyRecord = weeklyPerformanceByPlayerId.get(playerEntry.player.id);
+
+            if (!weeklyRecord) {
+              throw new Error("Weekly record missing for selected player.");
+            }
+
+            const prediction = await aiServiceClient.predictPlayerScore({
+              playerId: playerEntry.player.id,
+              positionGroup: playerEntry.player.positionGroup,
+              trainingRating: weeklyRecord.trainingRating,
+              fitness: weeklyRecord.fitness,
+              fatigue: weeklyRecord.fatigue,
+              morale: weeklyRecord.morale,
+              availability: weeklyRecord.availability,
+              injuryStatus: weeklyRecord.injuryStatus,
+              suspensionStatus: weeklyRecord.suspensionStatus,
+              age: playerEntry.player.age,
+            });
+
+            return `${playerEntry.player.fullName}: ${prediction.predicted_score} (${prediction.model_name})`;
+          }),
+      );
+
+      return `ML support scores for selected players: ${predictionResults.join("; ")}`;
+    } catch {
+      return "ML support unavailable for this recommendation run.";
+    }
+  },
+
   async generate(matchWeekId: string, generatedById: string) {
     const matchWeek = await prisma.matchWeek.findUnique({
       where: { id: matchWeekId },
@@ -135,6 +186,19 @@ export const recommendationService = {
       include: recommendationInclude,
     });
 
-    return formatRecommendation(recommendation);
+    const mlSupportSummary = await this.buildMlSupportSummary(
+      recommendation.recommendationPlayers,
+      matchWeek.weeklyPerformances,
+    );
+
+    const updatedRecommendation = await prisma.recommendation.update({
+      where: { id: recommendation.id },
+      data: {
+        mlSupportSummary,
+      },
+      include: recommendationInclude,
+    });
+
+    return formatRecommendation(updatedRecommendation);
   },
 };

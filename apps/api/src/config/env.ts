@@ -9,6 +9,7 @@ const envSchema = z.object({
   DATABASE_URL: z.string().min(1),
   JWT_SECRET: z.string().min(1),
   AI_SERVICE_URL: z.string().url(),
+  AI_SERVICE_TIMEOUT_MS: z.coerce.number().default(5000),
   FRONTEND_URL: z.string().url(),
 });
 
