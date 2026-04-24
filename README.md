@@ -124,6 +124,19 @@ This project develops a web-based decision-support system for a single football 
 - `docs/bug-log.md`
 - `docs/phases/phase-11-checklist.md`
 
+## Academic Mapping Documents
+- `docs/academic-mapping.md`
+- `docs/report-structure.md`
+- `docs/chapter-1-summary.md`
+- `docs/chapter-2-summary.md`
+- `docs/chapter-3-summary.md`
+- `docs/chapter-4-summary.md`
+- `docs/chapter-5-summary.md`
+- `docs/requirements-to-implementation-matrix.md`
+- `docs/objectives-to-outcomes-matrix.md`
+- `docs/phase-summary.md`
+- `docs/phases/phase-12-checklist.md`
+
 ## Local Run Overview
 - `docker compose up --build` starts PostgreSQL, backend API, AI service, and frontend together
 - Frontend runs on `http://localhost:5173`
@@ -143,4 +156,4 @@ This project develops a web-based decision-support system for a single football 
 - Document any scope changes before implementation
 
 ## Status
-Phase 11 testing and debugging completed. The repository now includes focused automated tests for backend services and recommendation logic, frontend integration-state tests, a manual verification matrix, and a documented bug log for defense traceability.
+Phase 12 documentation and academic mapping completed. The repository now includes report-facing chapter summaries, implementation matrices, academic positioning notes, and a structured mapping from scope and objectives to delivered system outcomes.
