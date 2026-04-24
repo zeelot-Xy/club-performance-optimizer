@@ -118,6 +118,12 @@ This project develops a web-based decision-support system for a single football 
 - `docs/frontend-backend-integration.md`
 - `docs/phases/phase-10-checklist.md`
 
+## Testing Documents
+- `docs/testing-strategy.md`
+- `docs/test-cases.md`
+- `docs/bug-log.md`
+- `docs/phases/phase-11-checklist.md`
+
 ## Local Run Overview
 - `docker compose up --build` starts PostgreSQL, backend API, AI service, and frontend together
 - Frontend runs on `http://localhost:5173`
@@ -137,4 +143,4 @@ This project develops a web-based decision-support system for a single football 
 - Document any scope changes before implementation
 
 ## Status
-Phase 10 frontend-backend integration completed. The repository now includes authenticated TanStack Query hooks, protected frontend routes, live players and match week views, and a recommendation page that fetches and triggers backend generation directly.
+Phase 11 testing and debugging completed. The repository now includes focused automated tests for backend services and recommendation logic, frontend integration-state tests, a manual verification matrix, and a documented bug log for defense traceability.
