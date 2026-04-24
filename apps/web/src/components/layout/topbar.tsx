@@ -1,5 +1,7 @@
-import { CalendarDays, Search, Sparkles } from "lucide-react";
+import { CalendarDays, LogOut, Search, Sparkles } from "lucide-react";
 import { useLocation } from "react-router-dom";
+
+import { useAuth } from "../../hooks/use-auth";
 
 const titleMap: Record<string, string> = {
   "/": "Dashboard",
@@ -10,6 +12,7 @@ const titleMap: Record<string, string> = {
 
 export const Topbar = () => {
   const location = useLocation();
+  const { user, logout } = useAuth();
   const title = titleMap[location.pathname] ?? "Coach Workspace";
 
   return (
@@ -31,6 +34,20 @@ export const Topbar = () => {
         <div className="hidden items-center gap-2 rounded-2xl border border-[var(--color-border)] bg-[rgba(255,255,255,0.6)] px-4 py-3 text-sm text-[var(--color-text-muted)] lg:flex">
           <Sparkles className="h-4 w-4 text-[var(--color-success)]" />
           Explainable mode
+        </div>
+        <div className="flex items-center gap-3 rounded-2xl border border-[var(--color-border)] bg-white/70 px-4 py-3">
+          <div className="hidden text-right sm:block">
+            <p className="text-sm font-medium text-[var(--color-text-strong)]">{user?.fullName ?? "Coach/Admin"}</p>
+            <p className="text-xs text-[var(--color-text-muted)]">{user?.email ?? "Local development user"}</p>
+          </div>
+          <button
+            type="button"
+            onClick={logout}
+            className="inline-flex items-center gap-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 text-sm text-[var(--color-text-strong)]"
+          >
+            <LogOut className="h-4 w-4" />
+            Logout
+          </button>
         </div>
       </div>
     </div>
