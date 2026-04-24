@@ -102,6 +102,10 @@ This project develops a web-based decision-support system for a single football 
 - `docs/backend-api-design.md`
 - `docs/phases/phase-6-checklist.md`
 
+## Recommendation Engine Documents
+- `docs/rule-based-recommendation-engine.md`
+- `docs/phases/phase-7-checklist.md`
+
 ## Local Run Overview
 - `docker compose up --build` starts PostgreSQL, backend API, AI service, and frontend together
 - Frontend runs on `http://localhost:5173`
@@ -110,6 +114,7 @@ This project develops a web-based decision-support system for a single football 
 - PostgreSQL runs on `localhost:5432`
 - Prisma commands run from `apps/api` or via `npm run db:* --workspace @club/api`
 - development admin seed runs via `npm run db:seed-admin --workspace @club/api`
+- rule-based recommendation generation runs via `POST /api/v1/recommendations/generate`
 
 ## Contribution Rules
 - Keep the scope locked to one club and weekly recommendations
@@ -119,4 +124,4 @@ This project develops a web-based decision-support system for a single football 
 - Document any scope changes before implementation
 
 ## Status
-Phase 6 backend API development completed. The repository now includes JWT authentication, player and match week CRUD foundations, weekly performance APIs, formation reads, recommendation read endpoints, and backend API documentation.
+Phase 7 rule-based recommendation development completed. The repository now includes explainable weighted scoring, formation feasibility checks, stored recommendation generation, and recommendation engine documentation.
