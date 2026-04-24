@@ -47,7 +47,7 @@ export const RecommendationExplanation = ({ recommendation }: RecommendationExpl
                 </div>
                 <StatusBadge
                   label={player.status.toLowerCase()}
-                  tone={player.status === "INJURED" || player.status === "UNAVAILABLE" ? "danger" : "warning"}
+                  tone={player.status === "INJURED" ? "danger" : "warning"}
                 />
               </div>
             </div>
