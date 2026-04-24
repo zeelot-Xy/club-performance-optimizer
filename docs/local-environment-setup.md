@@ -29,3 +29,6 @@ Phase 4 establishes the first runnable local development environment for the pro
 - Backend should respond to a health endpoint
 - AI service should respond to a health endpoint
 - PostgreSQL should be reachable by the backend container in Compose
+
+## Database Setup Extension
+Phase 5 adds Prisma as the relational modeling layer inside `apps/api`. Database generation, migration, and seeding are run from the API workspace against the PostgreSQL service defined in Docker Compose.
