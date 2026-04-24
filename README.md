@@ -137,6 +137,13 @@ This project develops a web-based decision-support system for a single football 
 - `docs/phase-summary.md`
 - `docs/phases/phase-12-checklist.md`
 
+## Final Readiness Documents
+- `docs/defense-preparation.md`
+- `docs/demo-script.md`
+- `docs/final-polish-checklist.md`
+- `docs/possible-defense-questions.md`
+- `docs/submission-checklist.md`
+
 ## Local Run Overview
 - `docker compose up --build` starts PostgreSQL, backend API, AI service, and frontend together
 - Frontend runs on `http://localhost:5173`
@@ -156,4 +163,4 @@ This project develops a web-based decision-support system for a single football 
 - Document any scope changes before implementation
 
 ## Status
-Phase 12 documentation and academic mapping completed. The repository now includes report-facing chapter summaries, implementation matrices, academic positioning notes, and a structured mapping from scope and objectives to delivered system outcomes.
+Phase 13 final polishing and defense preparation completed. The repository now includes submission-facing checklists, a demo script, defense talking points, likely examiner questions, and a final-readiness documentation layer on top of the implemented system.
