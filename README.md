@@ -106,6 +106,10 @@ This project develops a web-based decision-support system for a single football 
 - `docs/rule-based-recommendation-engine.md`
 - `docs/phases/phase-7-checklist.md`
 
+## ML Layer Documents
+- `docs/ml-layer-design.md`
+- `docs/phases/phase-8-checklist.md`
+
 ## Local Run Overview
 - `docker compose up --build` starts PostgreSQL, backend API, AI service, and frontend together
 - Frontend runs on `http://localhost:5173`
@@ -115,6 +119,7 @@ This project develops a web-based decision-support system for a single football 
 - Prisma commands run from `apps/api` or via `npm run db:* --workspace @club/api`
 - development admin seed runs via `npm run db:seed-admin --workspace @club/api`
 - rule-based recommendation generation runs via `POST /api/v1/recommendations/generate`
+- ML support is appended through the AI service when available and stored in `mlSupportSummary`
 
 ## Contribution Rules
 - Keep the scope locked to one club and weekly recommendations
@@ -124,4 +129,4 @@ This project develops a web-based decision-support system for a single football 
 - Document any scope changes before implementation
 
 ## Status
-Phase 7 rule-based recommendation development completed. The repository now includes explainable weighted scoring, formation feasibility checks, stored recommendation generation, and recommendation engine documentation.
+Phase 8 ML support development completed. The repository now includes a FastAPI-based Random Forest support layer, backend AI integration, graceful fallback behavior, and ML layer documentation.
