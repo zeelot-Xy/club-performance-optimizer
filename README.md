@@ -98,6 +98,10 @@ This project develops a web-based decision-support system for a single football 
 - `docs/database-model.md`
 - `docs/phases/phase-5-checklist.md`
 
+## Backend API Documents
+- `docs/backend-api-design.md`
+- `docs/phases/phase-6-checklist.md`
+
 ## Local Run Overview
 - `docker compose up --build` starts PostgreSQL, backend API, AI service, and frontend together
 - Frontend runs on `http://localhost:5173`
@@ -105,6 +109,7 @@ This project develops a web-based decision-support system for a single football 
 - AI service runs on `http://localhost:8001`
 - PostgreSQL runs on `localhost:5432`
 - Prisma commands run from `apps/api` or via `npm run db:* --workspace @club/api`
+- development admin seed runs via `npm run db:seed-admin --workspace @club/api`
 
 ## Contribution Rules
 - Keep the scope locked to one club and weekly recommendations
@@ -114,4 +119,4 @@ This project develops a web-based decision-support system for a single football 
 - Document any scope changes before implementation
 
 ## Status
-Phase 5 database modeling completed. The repository now includes Prisma schema modeling, database client setup, initial migration and seed flow, and database documentation for the football recommendation domain.
+Phase 6 backend API development completed. The repository now includes JWT authentication, player and match week CRUD foundations, weekly performance APIs, formation reads, recommendation read endpoints, and backend API documentation.
