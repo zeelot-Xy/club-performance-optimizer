@@ -110,6 +110,10 @@ This project develops a web-based decision-support system for a single football 
 - `docs/ml-layer-design.md`
 - `docs/phases/phase-8-checklist.md`
 
+## Frontend UI Documents
+- `docs/frontend-ui-design.md`
+- `docs/phases/phase-9-checklist.md`
+
 ## Local Run Overview
 - `docker compose up --build` starts PostgreSQL, backend API, AI service, and frontend together
 - Frontend runs on `http://localhost:5173`
@@ -129,4 +133,4 @@ This project develops a web-based decision-support system for a single football 
 - Document any scope changes before implementation
 
 ## Status
-Phase 8 ML support development completed. The repository now includes a FastAPI-based Random Forest support layer, backend AI integration, graceful fallback behavior, and ML layer documentation.
+Phase 9 frontend UI development completed. The repository now includes the routed Coach/Admin interface, mock-backed dashboard and recommendation views, a deep relic green tactical design system, and a custom football pitch visualization ready for Phase 10 integration.
