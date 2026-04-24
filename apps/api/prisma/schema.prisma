@@ -1,0 +1,213 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  COACH_ADMIN
+}
+
+enum PlayerStatus {
+  ACTIVE
+  INACTIVE
+  INJURED
+}
+
+enum PositionGroup {
+  GOALKEEPER
+  DEFENDER
+  MIDFIELDER
+  FORWARD
+}
+
+enum PreferredFoot {
+  LEFT
+  RIGHT
+  BOTH
+  UNKNOWN
+}
+
+enum AvailabilityStatus {
+  AVAILABLE
+  UNAVAILABLE
+}
+
+enum InjuryStatus {
+  FIT
+  MINOR_KNOCK
+  INJURED
+}
+
+enum SuspensionStatus {
+  ELIGIBLE
+  SUSPENDED
+}
+
+enum MatchWeekStatus {
+  DRAFT
+  READY
+  COMPLETED
+}
+
+enum RecommendationStatus {
+  DRAFT
+  FINAL
+  FAILED
+}
+
+enum RecommendationPlayerRole {
+  GOALKEEPER
+  DEFENDER
+  MIDFIELDER
+  FORWARD
+  BENCH
+  EXCLUDED
+}
+
+enum AuditAction {
+  LOGIN
+  LOGOUT
+  PLAYER_CREATED
+  PLAYER_UPDATED
+  MATCH_WEEK_CREATED
+  WEEKLY_PERFORMANCE_UPSERTED
+  RECOMMENDATION_GENERATED
+}
+
+model AdminUser {
+  id                  String           @id @default(cuid())
+  fullName            String
+  email               String           @unique
+  passwordHash        String
+  role                UserRole         @default(COACH_ADMIN)
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+  lastLoginAt         DateTime?
+  createdMatchWeeks   MatchWeek[]      @relation("MatchWeekCreatedBy")
+  generatedRecommendations Recommendation[] @relation("RecommendationGeneratedBy")
+  auditLogs           AuditLog[]
+}
+
+model Player {
+  id                    String                 @id @default(cuid())
+  fullName              String
+  squadNumber           Int                    @unique
+  primaryPosition       String
+  secondaryPosition     String?
+  positionGroup         PositionGroup
+  preferredFoot         PreferredFoot          @default(UNKNOWN)
+  age                   Int
+  heightCm              Int?
+  status                PlayerStatus           @default(ACTIVE)
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  weeklyPerformances    WeeklyPerformance[]
+  recommendationPlayers RecommendationPlayer[]
+}
+
+model MatchWeek {
+  id               String            @id @default(cuid())
+  label            String            @unique
+  opponentName     String?
+  matchDate        DateTime
+  status           MatchWeekStatus   @default(DRAFT)
+  notes            String?
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  createdById      String
+  createdBy        AdminUser         @relation("MatchWeekCreatedBy", fields: [createdById], references: [id])
+  weeklyPerformances WeeklyPerformance[]
+  recommendations  Recommendation[]
+
+  @@index([matchDate])
+}
+
+model WeeklyPerformance {
+  id               String             @id @default(cuid())
+  matchWeekId      String
+  playerId         String
+  trainingRating   Int
+  fitness          Int
+  fatigue          Int
+  morale           Int
+  availability     AvailabilityStatus @default(AVAILABLE)
+  injuryStatus     InjuryStatus       @default(FIT)
+  suspensionStatus SuspensionStatus   @default(ELIGIBLE)
+  coachNotes       String?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  matchWeek        MatchWeek          @relation(fields: [matchWeekId], references: [id], onDelete: Cascade)
+  player           Player             @relation(fields: [playerId], references: [id], onDelete: Restrict)
+
+  @@unique([matchWeekId, playerId])
+  @@index([playerId])
+}
+
+model Formation {
+  id              String           @id @default(cuid())
+  code            String           @unique
+  label           String
+  defenders       Int
+  midfielders     Int
+  forwards        Int
+  isActive        Boolean          @default(true)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  recommendations Recommendation[]
+}
+
+model Recommendation {
+  id                   String                 @id @default(cuid())
+  matchWeekId          String
+  formationId          String
+  generatedById        String
+  status               RecommendationStatus   @default(DRAFT)
+  summary              String
+  ruleScoreSummary     String
+  mlSupportSummary     String?
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime               @updatedAt
+  matchWeek            MatchWeek              @relation(fields: [matchWeekId], references: [id], onDelete: Restrict)
+  formation            Formation              @relation(fields: [formationId], references: [id], onDelete: Restrict)
+  generatedBy          AdminUser              @relation("RecommendationGeneratedBy", fields: [generatedById], references: [id], onDelete: Restrict)
+  recommendationPlayers RecommendationPlayer[]
+
+  @@index([matchWeekId])
+}
+
+model RecommendationPlayer {
+  id               String                   @id @default(cuid())
+  recommendationId String
+  playerId         String
+  role             RecommendationPlayerRole
+  startingPosition String?
+  isSelected       Boolean
+  computedScore    Decimal                  @db.Decimal(5, 2)
+  selectionReason  String?
+  exclusionReason  String?
+  rankOrder        Int?
+  createdAt        DateTime                 @default(now())
+  recommendation   Recommendation           @relation(fields: [recommendationId], references: [id], onDelete: Cascade)
+  player           Player                   @relation(fields: [playerId], references: [id], onDelete: Restrict)
+
+  @@index([recommendationId])
+  @@index([playerId])
+}
+
+model AuditLog {
+  id          String      @id @default(cuid())
+  adminUserId String
+  action      AuditAction
+  entityType  String
+  entityId    String?
+  description String
+  createdAt   DateTime    @default(now())
+  adminUser   AdminUser   @relation(fields: [adminUserId], references: [id], onDelete: Restrict)
+
+  @@index([adminUserId])
+  @@index([action])
+}
