@@ -25,20 +25,20 @@ export const Topbar = () => {
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
         <div className="flex items-center gap-2 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-3 text-sm text-[var(--color-text-muted)]">
           <Search className="h-4 w-4" />
-          Search remains local in Phase 9
+          Focused coach workspace
         </div>
         <div className="flex items-center gap-2 rounded-2xl bg-[var(--color-primary)] px-4 py-3 text-sm font-medium text-[var(--color-surface)]">
           <CalendarDays className="h-4 w-4" />
-          Week 7 active
+          Weekly selection workflow
         </div>
         <div className="hidden items-center gap-2 rounded-2xl border border-[var(--color-border)] bg-[rgba(255,255,255,0.6)] px-4 py-3 text-sm text-[var(--color-text-muted)] lg:flex">
           <Sparkles className="h-4 w-4 text-[var(--color-success)]" />
-          Explainable mode
+          Explainable recommendations
         </div>
         <div className="flex items-center gap-3 rounded-2xl border border-[var(--color-border)] bg-white/70 px-4 py-3">
           <div className="hidden text-right sm:block">
             <p className="text-sm font-medium text-[var(--color-text-strong)]">{user?.fullName ?? "Coach/Admin"}</p>
-            <p className="text-xs text-[var(--color-text-muted)]">{user?.email ?? "Local development user"}</p>
+            <p className="text-xs text-[var(--color-text-muted)]">{user?.email ?? "Authorized club account"}</p>
           </div>
           <button
             type="button"

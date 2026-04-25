@@ -9,8 +9,8 @@ type RecommendationExplanationProps = {
 export const RecommendationExplanation = ({ recommendation }: RecommendationExplanationProps) => (
   <div className="grid gap-5 xl:grid-cols-[1.15fr_0.85fr]">
     <SectionCard
-      title="Why This Recommendation Was Selected"
-      description="Explainability remains central. The coach can see why this formation and these starters were prioritized for the current week."
+      title="Why this recommendation was selected"
+      description="Review the core reasoning behind the chosen formation and the selected starters for this week."
     >
       <div className="space-y-4">
         <p className="rounded-[1.5rem] bg-[rgba(15,44,34,0.06)] p-4 text-sm leading-7 text-[var(--color-text-strong)]">
@@ -30,34 +30,40 @@ export const RecommendationExplanation = ({ recommendation }: RecommendationExpl
       </div>
     </SectionCard>
 
-    <SectionCard title="Exclusions and ML Support" description="Players excluded this week are shown with clear reasons. ML support remains advisory.">
+    <SectionCard title="Exclusions and ML support" description="Players left out this week are shown with clear reasons, while ML input remains advisory only.">
       <div className="space-y-5">
         <div className="space-y-3">
-          {recommendation.excludedPlayers.map((player) => (
-            <div
-              key={player.id}
-              className="rounded-[1.2rem] border border-[var(--color-border)] bg-[rgba(255,255,255,0.7)] p-4"
-            >
-              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                  <p className="font-semibold text-[var(--color-text-strong)]">
-                    #{player.squadNumber} {player.fullName}
-                  </p>
-                  <p className="mt-1 text-sm leading-6 text-[var(--color-text-muted)]">{player.reason}</p>
+          {recommendation.excludedPlayers.length ? (
+            recommendation.excludedPlayers.map((player) => (
+              <div
+                key={player.id}
+                className="rounded-[1.2rem] border border-[var(--color-border)] bg-[rgba(255,255,255,0.7)] p-4"
+              >
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <p className="font-semibold text-[var(--color-text-strong)]">
+                      #{player.squadNumber} {player.fullName}
+                    </p>
+                    <p className="mt-1 text-sm leading-6 text-[var(--color-text-muted)]">{player.reason}</p>
+                  </div>
+                  <StatusBadge
+                    label={player.status.toLowerCase()}
+                    tone={player.status === "INJURED" ? "danger" : "warning"}
+                  />
                 </div>
-                <StatusBadge
-                  label={player.status.toLowerCase()}
-                  tone={player.status === "INJURED" ? "danger" : "warning"}
-                />
               </div>
+            ))
+          ) : (
+            <div className="rounded-[1.2rem] border border-[var(--color-border)] bg-[rgba(255,255,255,0.7)] p-4 text-sm leading-6 text-[var(--color-text-muted)]">
+              No notable exclusions were recorded for this recommendation run.
             </div>
-          ))}
+          )}
         </div>
 
         <div className="rounded-[1.5rem] border border-[rgba(15,44,34,0.08)] bg-[rgba(15,44,34,0.06)] p-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-text-muted)]">ML Support Summary</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-text-muted)]">ML support summary</p>
           <p className="mt-3 text-sm leading-7 text-[var(--color-text-strong)]">
-            {recommendation.mlSupportSummary ?? "ML support summary not available for this recommendation run."}
+            {recommendation.mlSupportSummary ?? "No ML support summary was recorded for this recommendation run."}
           </p>
         </div>
       </div>

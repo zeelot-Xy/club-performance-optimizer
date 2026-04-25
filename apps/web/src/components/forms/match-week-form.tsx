@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import type { MatchWeekCreateInput, MatchWeekStatus } from "../../types/ui";
+import { toTitleCase } from "../../lib/formatters";
 
 type MatchWeekFormProps = {
   onSubmit: (payload: MatchWeekCreateInput) => Promise<void>;
@@ -41,32 +42,53 @@ export const MatchWeekForm = ({ onSubmit, isSubmitting }: MatchWeekFormProps) =>
       }}
     >
       <label className="space-y-2 text-sm text-[var(--color-text-muted)]">
-        <span>Label</span>
-        <input className="w-full rounded-2xl border border-[var(--color-border)] bg-white px-4 py-3 text-[var(--color-text-strong)]" value={form.label} onChange={(e) => updateField("label", e.target.value)} required />
+        <span>Week label</span>
+        <input
+          className="w-full rounded-2xl border border-[var(--color-border)] bg-white px-4 py-3 text-[var(--color-text-strong)]"
+          value={form.label}
+          onChange={(e) => updateField("label", e.target.value)}
+          placeholder="e.g. Week 3"
+          required
+        />
+        <p className="text-xs leading-5 text-[var(--color-text-muted)]">Use a short label that keeps the planning cycle easy to identify.</p>
       </label>
       <label className="space-y-2 text-sm text-[var(--color-text-muted)]">
         <span>Opponent</span>
-        <input className="w-full rounded-2xl border border-[var(--color-border)] bg-white px-4 py-3 text-[var(--color-text-strong)]" value={form.opponentName ?? ""} onChange={(e) => updateField("opponentName", e.target.value)} />
+        <input
+          className="w-full rounded-2xl border border-[var(--color-border)] bg-white px-4 py-3 text-[var(--color-text-strong)]"
+          value={form.opponentName ?? ""}
+          onChange={(e) => updateField("opponentName", e.target.value)}
+          placeholder="e.g. Rangers FC"
+        />
+        <p className="text-xs leading-5 text-[var(--color-text-muted)]">Add the opposing team for context in dashboard and recommendation views.</p>
       </label>
       <label className="space-y-2 text-sm text-[var(--color-text-muted)]">
         <span>Match date</span>
         <input className="w-full rounded-2xl border border-[var(--color-border)] bg-white px-4 py-3 text-[var(--color-text-strong)]" type="date" value={form.matchDate} onChange={(e) => updateField("matchDate", e.target.value)} required />
+        <p className="text-xs leading-5 text-[var(--color-text-muted)]">This anchors the recommendation to a specific weekly fixture.</p>
       </label>
       <label className="space-y-2 text-sm text-[var(--color-text-muted)]">
         <span>Status</span>
         <select className="w-full rounded-2xl border border-[var(--color-border)] bg-white px-4 py-3 text-[var(--color-text-strong)]" value={form.status} onChange={(e) => updateField("status", e.target.value as MatchWeekStatus)}>
           {matchWeekStatuses.map((option) => (
-            <option key={option} value={option}>{option}</option>
+            <option key={option} value={option}>{toTitleCase(option)}</option>
           ))}
         </select>
+        <p className="text-xs leading-5 text-[var(--color-text-muted)]">Move a week to ready when player data is complete and the recommendation can be generated.</p>
       </label>
       <label className="space-y-2 text-sm text-[var(--color-text-muted)] md:col-span-2">
         <span>Coach notes</span>
-        <textarea className="min-h-28 w-full rounded-2xl border border-[var(--color-border)] bg-white px-4 py-3 text-[var(--color-text-strong)]" value={form.notes ?? ""} onChange={(e) => updateField("notes", e.target.value)} />
+        <textarea
+          className="min-h-28 w-full rounded-2xl border border-[var(--color-border)] bg-white px-4 py-3 text-[var(--color-text-strong)]"
+          value={form.notes ?? ""}
+          onChange={(e) => updateField("notes", e.target.value)}
+          placeholder="Add tactical notes, injuries to monitor, or selection concerns for this week."
+        />
+        <p className="text-xs leading-5 text-[var(--color-text-muted)]">Use this space for tactical concerns, squad issues, or preparation notes.</p>
       </label>
       <div className="md:col-span-2">
         <button type="submit" disabled={isSubmitting} className="rounded-2xl bg-[var(--color-primary)] px-5 py-3 text-sm font-medium text-[var(--color-surface)] disabled:opacity-70">
-          {isSubmitting ? "Saving match week..." : "Create match week"}
+          {isSubmitting ? "Saving match week..." : "Save match week"}
         </button>
       </div>
     </form>
