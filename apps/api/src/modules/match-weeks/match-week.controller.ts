@@ -6,20 +6,20 @@ import { createMatchWeekSchema, updateMatchWeekSchema } from "./match-week.schem
 import { matchWeekService } from "./match-week.service.js";
 
 export const matchWeekController = {
-  async list(_request: Request, response: Response) {
-    const matchWeeks = await matchWeekService.list();
+  async list(request: Request, response: Response) {
+    const matchWeeks = await matchWeekService.list(request.auth!.userId);
     response.status(HTTP_STATUS.OK).json(matchWeeks);
   },
 
   async getById(request: Request, response: Response) {
     const matchWeekId = getRouteParam(request.params.id, "id");
-    const matchWeek = await matchWeekService.getById(matchWeekId);
+    const matchWeek = await matchWeekService.getById(matchWeekId, request.auth!.userId);
     response.status(HTTP_STATUS.OK).json(matchWeek);
   },
 
   async create(request: Request, response: Response) {
     const payload = createMatchWeekSchema.parse(request.body);
-    const matchWeek = await matchWeekService.create({
+    const matchWeek = await matchWeekService.create(request.auth!.userId, {
       ...payload,
       createdById: request.auth!.userId,
     });
@@ -29,7 +29,7 @@ export const matchWeekController = {
   async update(request: Request, response: Response) {
     const matchWeekId = getRouteParam(request.params.id, "id");
     const payload = updateMatchWeekSchema.parse(request.body);
-    const matchWeek = await matchWeekService.update(matchWeekId, payload);
+    const matchWeek = await matchWeekService.update(matchWeekId, request.auth!.userId, payload);
     response.status(HTTP_STATUS.OK).json(matchWeek);
   },
 };

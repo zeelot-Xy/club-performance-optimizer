@@ -38,6 +38,7 @@ export const authService = {
         fullName: user.fullName,
         email: user.email,
         role: user.role,
+        activeClubId: user.activeClubId,
       },
     };
   },
@@ -50,6 +51,7 @@ export const authService = {
         fullName: true,
         email: true,
         role: true,
+        activeClubId: true,
         createdAt: true,
         lastLoginAt: true,
       },

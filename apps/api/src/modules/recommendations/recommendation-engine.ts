@@ -68,7 +68,7 @@ export const scorePlayer = (record: WeeklyRecordWithPlayer) => {
 
   return {
     score,
-    reason: `Selected based on ${reason}.`,
+    reason: `Selected because the player balanced readiness, welfare checks, and recent weekly form through ${reason}.`,
   };
 };
 
@@ -172,7 +172,7 @@ export const generateRecommendationFromWeeklyData = (
           ...candidates.slice(needed).map((candidate) => ({
             ...candidate,
             exclusionReason:
-              "Excluded because the chosen formation only has limited slots for this tactical group.",
+              "Excluded because the chosen formation had fewer tactical slots in this unit, and other candidates ranked higher on fair visible criteria.",
           })),
         );
       }
@@ -191,7 +191,7 @@ export const generateRecommendationFromWeeklyData = (
           ...candidate,
           exclusionReason:
             candidate.exclusionReason ??
-            "Excluded because the player was ranked below the selected lineup for this formation.",
+            "Excluded because the player ranked below the selected lineup after readiness, welfare, and tactical-fit checks.",
         })),
       );
 
@@ -199,8 +199,8 @@ export const generateRecommendationFromWeeklyData = (
         selected.reduce((sum, candidate) => sum + candidate.score, 0).toFixed(2),
       );
 
-      const summary = `For ${matchWeekLabel}, the system recommends ${formation.code} with a rule-based team score of ${teamScore}.`;
-      const ruleScoreSummary = `The lineup was selected from weekly training rating, fitness, morale, and fatigue with deterministic formation-fit checks.`;
+      const summary = `For ${matchWeekLabel}, the system recommends ${formation.code} with a rule-based team score of ${teamScore}, balancing fair comparison, player welfare, and tactical performance fit.`;
+      const ruleScoreSummary = `The lineup was selected using visible weekly readiness signals such as training rating, fitness, morale, and fatigue, then filtered through deterministic formation-fit and welfare checks.`;
 
       return {
         formation,

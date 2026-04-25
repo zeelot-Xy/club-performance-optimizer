@@ -4,6 +4,7 @@ import { HTTP_STATUS } from "../../config/http.js";
 import { aiServiceClient } from "../../lib/ai-service.js";
 import { HttpError } from "../../lib/http-error.js";
 import { prisma } from "../../lib/prisma.js";
+import { clubService } from "../clubs/club.service.js";
 import {
   generateRecommendationFromWeeklyData,
   validateMatchWeekReady,
@@ -27,7 +28,9 @@ const recommendationInclude = {
   },
 } satisfies Prisma.RecommendationInclude;
 
-const formatRecommendation = (recommendation: Prisma.RecommendationGetPayload<{ include: typeof recommendationInclude }>) => ({
+const formatRecommendation = (
+  recommendation: Prisma.RecommendationGetPayload<{ include: typeof recommendationInclude }>,
+) => ({
   ...recommendation,
   recommendationPlayers: recommendation.recommendationPlayers.map((playerEntry) => ({
     ...playerEntry,
@@ -36,8 +39,21 @@ const formatRecommendation = (recommendation: Prisma.RecommendationGetPayload<{ 
 });
 
 export const recommendationService = {
-  async list() {
+  async list(userId?: string) {
+    const club = userId ? await clubService.getCurrent(userId) : null;
+
+    if (userId && !club) {
+      return [];
+    }
+
     const recommendations = await prisma.recommendation.findMany({
+      where: club
+        ? {
+            matchWeek: {
+              clubId: club.id,
+            },
+          }
+        : undefined,
       include: recommendationInclude,
       orderBy: [{ createdAt: "desc" }],
     });
@@ -45,11 +61,22 @@ export const recommendationService = {
     return recommendations.map(formatRecommendation);
   },
 
-  async getById(id: string) {
-    const recommendation = await prisma.recommendation.findUnique({
-      where: { id },
-      include: recommendationInclude,
-    });
+  async getById(id: string, userId?: string) {
+    const club = userId ? await clubService.requireActiveClub(userId) : null;
+    const recommendation = club
+      ? await prisma.recommendation.findFirst({
+          where: {
+            id,
+            matchWeek: {
+              clubId: club.id,
+            },
+          },
+          include: recommendationInclude,
+        })
+      : await prisma.recommendation.findUnique({
+          where: { id },
+          include: recommendationInclude,
+        });
 
     if (!recommendation) {
       throw new HttpError(HTTP_STATUS.NOT_FOUND, "Recommendation not found.");
@@ -58,9 +85,17 @@ export const recommendationService = {
     return formatRecommendation(recommendation);
   },
 
-  async getByMatchWeek(matchWeekId: string) {
+  async getByMatchWeek(matchWeekId: string, userId?: string) {
+    const club = userId ? await clubService.requireActiveClub(userId) : null;
     const recommendations = await prisma.recommendation.findMany({
-      where: { matchWeekId },
+      where: club
+        ? {
+            matchWeekId,
+            matchWeek: {
+              clubId: club.id,
+            },
+          }
+        : { matchWeekId },
       include: recommendationInclude,
       orderBy: [{ createdAt: "desc" }],
     });
@@ -126,8 +161,12 @@ export const recommendationService = {
   },
 
   async generate(matchWeekId: string, generatedById: string) {
-    const matchWeek = await prisma.matchWeek.findUnique({
-      where: { id: matchWeekId },
+    const club = await clubService.requireActiveClub(generatedById);
+    const matchWeek = await prisma.matchWeek.findFirst({
+      where: {
+        id: matchWeekId,
+        clubId: club.id,
+      },
       include: {
         weeklyPerformances: {
           include: {

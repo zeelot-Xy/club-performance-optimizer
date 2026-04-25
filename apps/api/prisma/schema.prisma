@@ -84,18 +84,41 @@ model AdminUser {
   email               String           @unique
   passwordHash        String
   role                UserRole         @default(COACH_ADMIN)
+  activeClubId        String?
   createdAt           DateTime         @default(now())
   updatedAt           DateTime         @updatedAt
   lastLoginAt         DateTime?
+  activeClub          Club?            @relation("ActiveClub", fields: [activeClubId], references: [id], onDelete: SetNull)
   createdMatchWeeks   MatchWeek[]      @relation("MatchWeekCreatedBy")
   generatedRecommendations Recommendation[] @relation("RecommendationGeneratedBy")
   auditLogs           AuditLog[]
 }
 
+model Club {
+  id                  String      @id @default(cuid())
+  name                String
+  shortName           String?
+  provider            String
+  externalClubId      String
+  country             String?
+  competition         String?
+  crestUrl            String?
+  isActive            Boolean     @default(false)
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
+  activeForAdmins     AdminUser[] @relation("ActiveClub")
+  players             Player[]
+  matchWeeks          MatchWeek[]
+
+  @@unique([provider, externalClubId])
+  @@index([isActive])
+}
+
 model Player {
   id                    String                 @id @default(cuid())
+  clubId                String?
   fullName              String
-  squadNumber           Int                    @unique
+  squadNumber           Int
   primaryPosition       String
   secondaryPosition     String?
   positionGroup         PositionGroup
@@ -105,13 +128,18 @@ model Player {
   status                PlayerStatus           @default(ACTIVE)
   createdAt             DateTime               @default(now())
   updatedAt             DateTime               @updatedAt
+  club                  Club?                  @relation(fields: [clubId], references: [id], onDelete: SetNull)
   weeklyPerformances    WeeklyPerformance[]
   recommendationPlayers RecommendationPlayer[]
+
+  @@unique([clubId, squadNumber])
+  @@index([clubId])
 }
 
 model MatchWeek {
   id               String            @id @default(cuid())
-  label            String            @unique
+  clubId           String?
+  label            String
   opponentName     String?
   matchDate        DateTime
   status           MatchWeekStatus   @default(DRAFT)
@@ -119,10 +147,13 @@ model MatchWeek {
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
   createdById      String
+  club             Club?             @relation(fields: [clubId], references: [id], onDelete: SetNull)
   createdBy        AdminUser         @relation("MatchWeekCreatedBy", fields: [createdById], references: [id])
   weeklyPerformances WeeklyPerformance[]
   recommendations  Recommendation[]
 
+  @@unique([clubId, label])
+  @@index([clubId])
   @@index([matchDate])
 }
 

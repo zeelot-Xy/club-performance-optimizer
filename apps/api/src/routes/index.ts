@@ -3,6 +3,7 @@ import { Router } from "express";
 import { env } from "../config/env.js";
 import { APP_METADATA } from "../config/constants.js";
 import { authRoutes } from "../modules/auth/auth.routes.js";
+import { clubRoutes } from "../modules/clubs/club.routes.js";
 import { formationRoutes } from "../modules/formations/formation.routes.js";
 import { matchWeekRoutes } from "../modules/match-weeks/match-week.routes.js";
 import { playerRoutes } from "../modules/players/player.routes.js";
@@ -25,6 +26,7 @@ appRouter.get("/meta", (_request, response) => {
 });
 
 appRouter.use("/auth", authRoutes);
+appRouter.use("/clubs", clubRoutes);
 appRouter.use("/players", playerRoutes);
 appRouter.use("/match-weeks", matchWeekRoutes);
 appRouter.use("/weekly-performance", weeklyPerformanceRoutes);
