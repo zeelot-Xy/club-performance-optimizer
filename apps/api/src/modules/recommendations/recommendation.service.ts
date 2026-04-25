@@ -170,7 +170,21 @@ export const recommendationService = {
       include: {
         weeklyPerformances: {
           include: {
-            player: true,
+            player: {
+              include: {
+                importedPlayerStats: {
+                  include: {
+                    importedMatch: true,
+                  },
+                  orderBy: {
+                    importedMatch: {
+                      matchDate: "desc",
+                    },
+                  },
+                  take: 5,
+                },
+              },
+            },
           },
         },
       },

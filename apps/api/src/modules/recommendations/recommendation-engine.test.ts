@@ -75,6 +75,7 @@ const buildWeeklyRecord = (
       age: 24,
       heightCm: 180,
       status: overrides.status ?? PlayerStatus.ACTIVE,
+      importedPlayerStats: [],
       createdAt: new Date(),
       updatedAt: new Date(),
     },

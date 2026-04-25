@@ -109,6 +109,8 @@ model Club {
   activeForAdmins     AdminUser[] @relation("ActiveClub")
   players             Player[]
   matchWeeks          MatchWeek[]
+  importedMatches     ImportedMatch[]
+  importedPlayerStats ImportedPlayerStat[]
 
   @@unique([provider, externalClubId])
   @@index([isActive])
@@ -117,6 +119,7 @@ model Club {
 model Player {
   id                    String                 @id @default(cuid())
   clubId                String?
+  externalPlayerId      String?
   fullName              String
   squadNumber           Int
   primaryPosition       String
@@ -125,14 +128,18 @@ model Player {
   preferredFoot         PreferredFoot          @default(UNKNOWN)
   age                   Int
   heightCm              Int?
+  nationality           String?
+  profileImageUrl       String?
   status                PlayerStatus           @default(ACTIVE)
   createdAt             DateTime               @default(now())
   updatedAt             DateTime               @updatedAt
   club                  Club?                  @relation(fields: [clubId], references: [id], onDelete: SetNull)
+  importedPlayerStats   ImportedPlayerStat[]
   weeklyPerformances    WeeklyPerformance[]
   recommendationPlayers RecommendationPlayer[]
 
   @@unique([clubId, squadNumber])
+  @@unique([clubId, externalPlayerId])
   @@index([clubId])
 }
 
@@ -168,6 +175,8 @@ model WeeklyPerformance {
   availability     AvailabilityStatus @default(AVAILABLE)
   injuryStatus     InjuryStatus       @default(FIT)
   suspensionStatus SuspensionStatus   @default(ELIGIBLE)
+  isGeneratedBaseline Boolean         @default(false)
+  sourceSummary    String?
   coachNotes       String?
   createdAt        DateTime           @default(now())
   updatedAt        DateTime           @updatedAt
@@ -176,6 +185,55 @@ model WeeklyPerformance {
 
   @@unique([matchWeekId, playerId])
   @@index([playerId])
+}
+
+model ImportedMatch {
+  id               String               @id @default(cuid())
+  clubId           String
+  externalMatchId  String
+  sourceProvider   String
+  opponentName     String
+  competition      String?
+  matchDate        DateTime
+  venue            String?
+  isHome           Boolean
+  result           String?
+  goalsFor         Int?
+  goalsAgainst     Int?
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
+  club             Club                 @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  importedPlayerStats ImportedPlayerStat[]
+
+  @@unique([clubId, sourceProvider, externalMatchId])
+  @@index([clubId, matchDate])
+}
+
+model ImportedPlayerStat {
+  id               String      @id @default(cuid())
+  clubId           String
+  playerId         String
+  importedMatchId  String
+  sourceProvider   String
+  minutes          Int?
+  goals            Int         @default(0)
+  assists          Int         @default(0)
+  rating           Float?
+  cleanSheet       Boolean?
+  saves            Int?
+  yellowCards      Int         @default(0)
+  redCards         Int         @default(0)
+  started          Boolean?
+  wasSubstitute    Boolean?
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+  club             Club        @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  player           Player      @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  importedMatch    ImportedMatch @relation(fields: [importedMatchId], references: [id], onDelete: Cascade)
+
+  @@unique([playerId, importedMatchId])
+  @@index([clubId, playerId])
+  @@index([importedMatchId])
 }
 
 model Formation {

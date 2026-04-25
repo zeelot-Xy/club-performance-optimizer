@@ -8,6 +8,8 @@ import {
   RecommendationStatus,
   SuspensionStatus,
   type Formation,
+  type ImportedPlayerStat,
+  type ImportedMatch,
   type Player,
   type WeeklyPerformance,
 } from "@prisma/client";
@@ -16,7 +18,13 @@ import { HTTP_STATUS } from "../../config/http.js";
 import { HttpError } from "../../lib/http-error.js";
 
 type WeeklyRecordWithPlayer = WeeklyPerformance & {
-  player: Player;
+  player: Player & {
+    importedPlayerStats: Array<
+      ImportedPlayerStat & {
+        importedMatch: ImportedMatch;
+      }
+    >;
+  };
 };
 
 type ScoredCandidate = {
@@ -48,15 +56,55 @@ const ROLE_BY_GROUP: Record<PositionGroup, RecommendationPlayerRole> = {
 
 const normalizeTrainingRating = (value: number) => value * 10;
 const normalizeFatigue = (value: number) => 100 - value;
+const normalizeRecentForm = (value: number) => value;
+
+const summarizeRecentForm = (record: WeeklyRecordWithPlayer) => {
+  const recentStats = (record.player.importedPlayerStats ?? []).slice(0, 5);
+
+  if (!recentStats.length) {
+    return {
+      score: 55,
+      reason: "recent form context was limited, so the system leaned on weekly readiness signals",
+    };
+  }
+
+  const averageRating =
+    recentStats.reduce((sum, stat) => sum + (stat.rating ?? 6.8), 0) / recentStats.length;
+  const totalGoals = recentStats.reduce((sum, stat) => sum + stat.goals, 0);
+  const totalAssists = recentStats.reduce((sum, stat) => sum + stat.assists, 0);
+  const totalSaves = recentStats.reduce((sum, stat) => sum + (stat.saves ?? 0), 0);
+  const cleanSheets = recentStats.filter((stat) => stat.cleanSheet).length;
+  const contributionBoost =
+    totalGoals * 4 + totalAssists * 3 + cleanSheets * 3 + Math.min(totalSaves, 12) * 0.6;
+  const score = clamp(Math.round(averageRating * 10 + contributionBoost), 45, 96);
+
+  return {
+    score,
+    reason:
+      totalGoals || totalAssists || totalSaves || cleanSheets
+        ? `recent form added context through ${totalGoals} goals, ${totalAssists} assists, ${cleanSheets} clean sheets, and ${totalSaves} saves`
+        : `recent form was neutral across ${recentStats.length} imported matches`,
+  };
+};
+
+const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 
 export const scorePlayer = (record: WeeklyRecordWithPlayer) => {
-  const trainingComponent = normalizeTrainingRating(record.trainingRating) * 0.3;
-  const fitnessComponent = record.fitness * 0.3;
-  const moraleComponent = record.morale * 0.15;
-  const fatigueComponent = normalizeFatigue(record.fatigue) * 0.25;
+  const recentForm = summarizeRecentForm(record);
+  const trainingComponent = normalizeTrainingRating(record.trainingRating) * 0.27;
+  const fitnessComponent = record.fitness * 0.27;
+  const moraleComponent = record.morale * 0.14;
+  const fatigueComponent = normalizeFatigue(record.fatigue) * 0.22;
+  const recentFormComponent = normalizeRecentForm(recentForm.score) * 0.1;
 
   const score = Number(
-    (trainingComponent + fitnessComponent + moraleComponent + fatigueComponent).toFixed(2),
+    (
+      trainingComponent +
+      fitnessComponent +
+      moraleComponent +
+      fatigueComponent +
+      recentFormComponent
+    ).toFixed(2),
   );
 
   const reason = [
@@ -64,6 +112,7 @@ export const scorePlayer = (record: WeeklyRecordWithPlayer) => {
     `fitness ${record.fitness}/100`,
     `morale ${record.morale}/100`,
     `fatigue ${record.fatigue}/100`,
+    recentForm.reason,
   ].join(", ");
 
   return {

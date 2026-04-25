@@ -13,6 +13,9 @@ const prismaMock = {
     findUnique: vi.fn(),
     findFirst: vi.fn(),
   },
+  importedPlayerStat: {
+    findMany: vi.fn(),
+  },
 };
 
 vi.mock("../../lib/prisma.js", () => ({
@@ -22,6 +25,7 @@ vi.mock("../../lib/prisma.js", () => ({
 describe("playerService", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    prismaMock.importedPlayerStat.findMany.mockResolvedValue([]);
   });
 
   it("lists players ordered by squad number", async () => {

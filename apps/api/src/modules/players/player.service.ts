@@ -5,6 +5,41 @@ import { HttpError } from "../../lib/http-error.js";
 import { prisma } from "../../lib/prisma.js";
 import { clubService } from "../clubs/club.service.js";
 
+const buildRecentPerformanceSummary = (
+  stats: Array<{
+    minutes: number | null;
+    goals: number;
+    assists: number;
+    rating: number | null;
+    cleanSheet: boolean | null;
+    saves: number | null;
+  }>,
+) => {
+  const matchesConsidered = stats.length;
+  const totalMinutes = stats.reduce((sum, stat) => sum + (stat.minutes ?? 0), 0);
+  const totalGoals = stats.reduce((sum, stat) => sum + stat.goals, 0);
+  const totalAssists = stats.reduce((sum, stat) => sum + stat.assists, 0);
+  const totalSaves = stats.reduce((sum, stat) => sum + (stat.saves ?? 0), 0);
+  const cleanSheets = stats.filter((stat) => stat.cleanSheet).length;
+  const ratedMatches = stats.filter((stat) => stat.rating !== null);
+
+  return {
+    matchesConsidered,
+    totalMinutes,
+    totalGoals,
+    totalAssists,
+    totalSaves,
+    cleanSheets,
+    averageRating: ratedMatches.length
+      ? Number(
+          (
+            ratedMatches.reduce((sum, stat) => sum + (stat.rating ?? 0), 0) / ratedMatches.length
+          ).toFixed(2),
+        )
+      : null,
+  };
+};
+
 export const playerService = {
   async list(userId?: string) {
     if (!userId) {
@@ -92,10 +127,49 @@ export const playerService = {
           orderBy: [{ matchWeek: { matchDate: "desc" } }, { createdAt: "desc" }],
         });
 
+    const recentPerformanceHistory = await prisma.importedPlayerStat.findMany({
+      where: {
+        playerId: id,
+        ...(club
+          ? {
+              clubId: club.id,
+            }
+          : {}),
+      },
+      include: {
+        importedMatch: true,
+      },
+      orderBy: {
+        importedMatch: {
+          matchDate: "desc",
+        },
+      },
+      take: 5,
+    });
+
+    const recentPerformanceSummary = buildRecentPerformanceSummary(recentPerformanceHistory);
+
     return {
       player,
       weeklyPerformance,
       matchWeek: weeklyPerformance?.matchWeek ?? null,
+      recentPerformanceSummary,
+      recentPerformanceHistory: recentPerformanceHistory.map((entry) => ({
+        id: entry.id,
+        matchDate: entry.importedMatch.matchDate,
+        opponentName: entry.importedMatch.opponentName,
+        competition: entry.importedMatch.competition,
+        venue: entry.importedMatch.venue,
+        result: entry.importedMatch.result,
+        minutes: entry.minutes,
+        goals: entry.goals,
+        assists: entry.assists,
+        rating: entry.rating,
+        cleanSheet: entry.cleanSheet,
+        saves: entry.saves,
+        yellowCards: entry.yellowCards,
+        redCards: entry.redCards,
+      })),
     };
   },
 
