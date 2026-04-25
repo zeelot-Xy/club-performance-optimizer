@@ -9,6 +9,7 @@ export const playerRoutes = Router();
 playerRoutes.use(authMiddleware);
 
 playerRoutes.get("/", asyncHandler(playerController.list));
+playerRoutes.get("/:id/details", asyncHandler(playerController.getDetails));
 playerRoutes.get("/:id", asyncHandler(playerController.getById));
 playerRoutes.post("/", asyncHandler(playerController.create));
 playerRoutes.patch("/:id", asyncHandler(playerController.update));

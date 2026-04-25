@@ -17,3 +17,7 @@ export const updatePlayerSchema = createPlayerSchema.partial().refine(
   (value) => Object.keys(value).length > 0,
   { message: "At least one player field must be provided." },
 );
+
+export const playerDetailsQuerySchema = z.object({
+  matchWeekId: z.string().trim().min(1).optional(),
+});

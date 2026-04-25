@@ -21,6 +21,39 @@ export const playerService = {
     return player;
   },
 
+  async getDetails(id: string, matchWeekId?: string) {
+    const player = await this.getById(id);
+
+    const weeklyPerformance = matchWeekId
+      ? await prisma.weeklyPerformance.findUnique({
+          where: {
+            matchWeekId_playerId: {
+              matchWeekId,
+              playerId: id,
+            },
+          },
+          include: {
+            matchWeek: true,
+          },
+        })
+      : await prisma.weeklyPerformance.findFirst({
+          where: { playerId: id },
+          include: {
+            matchWeek: true,
+          },
+          orderBy: [
+            { matchWeek: { matchDate: "desc" } },
+            { createdAt: "desc" },
+          ],
+        });
+
+    return {
+      player,
+      weeklyPerformance,
+      matchWeek: weeklyPerformance?.matchWeek ?? null,
+    };
+  },
+
   async create(input: Prisma.PlayerUncheckedCreateInput) {
     return prisma.player.create({ data: input });
   },

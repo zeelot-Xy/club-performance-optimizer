@@ -2,7 +2,7 @@ import type { Request, Response } from "express";
 
 import { HTTP_STATUS } from "../../config/http.js";
 import { getRouteParam } from "../../lib/get-route-param.js";
-import { createPlayerSchema, updatePlayerSchema } from "./player.schema.js";
+import { createPlayerSchema, playerDetailsQuerySchema, updatePlayerSchema } from "./player.schema.js";
 import { playerService } from "./player.service.js";
 
 export const playerController = {
@@ -15,6 +15,13 @@ export const playerController = {
     const playerId = getRouteParam(request.params.id, "id");
     const player = await playerService.getById(playerId);
     response.status(HTTP_STATUS.OK).json(player);
+  },
+
+  async getDetails(request: Request, response: Response) {
+    const playerId = getRouteParam(request.params.id, "id");
+    const { matchWeekId } = playerDetailsQuerySchema.parse(request.query);
+    const details = await playerService.getDetails(playerId, matchWeekId);
+    response.status(HTTP_STATUS.OK).json(details);
   },
 
   async create(request: Request, response: Response) {
