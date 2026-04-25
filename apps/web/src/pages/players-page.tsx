@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { Plus, Search } from "lucide-react";
 
 import { PlayerForm } from "../components/forms/player-form";
+import { PlayerStatsModal } from "../components/players/player-stats-modal";
 import { DataTable } from "../components/ui/data-table";
 import { EmptyState } from "../components/ui/empty-state";
 import { ErrorState } from "../components/ui/error-state";
@@ -15,6 +16,7 @@ import type { PlayerCreateInput } from "../types/ui";
 
 export const PlayersPage = () => {
   const [showCreateForm, setShowCreateForm] = useState(false);
+  const [selectedPlayerId, setSelectedPlayerId] = useState<string | null>(null);
   const { data, isLoading, isError, error, createPlayer } = usePlayers();
 
   const players = useMemo(() => (data ?? []).map(mapApiPlayerToRecord), [data]);
@@ -96,7 +98,11 @@ export const PlayersPage = () => {
                 key: "identity",
                 header: "Player",
                 render: (player) => (
-                  <div>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedPlayerId(player.id)}
+                    className="text-left transition hover:opacity-80"
+                  >
                     <p className="font-semibold text-[var(--color-text-strong)]">
                       #{player.squadNumber} {player.fullName}
                     </p>
@@ -104,7 +110,7 @@ export const PlayersPage = () => {
                       {player.primaryPosition}
                       {player.secondaryPosition ? ` / ${player.secondaryPosition}` : ""}
                     </p>
-                  </div>
+                  </button>
                 ),
               },
               {
@@ -147,6 +153,12 @@ export const PlayersPage = () => {
           />
         ) : null}
       </SectionCard>
+
+      <PlayerStatsModal
+        playerId={selectedPlayerId}
+        isOpen={Boolean(selectedPlayerId)}
+        onClose={() => setSelectedPlayerId(null)}
+      />
     </div>
   );
 };

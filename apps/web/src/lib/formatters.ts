@@ -1,11 +1,13 @@
 import type {
   ApiMatchWeek,
   ApiPlayer,
+  ApiPlayerDetails,
   ApiRecommendation,
   ExcludedPlayer,
   MatchWeekRecord,
   MatchWeekStatus,
   PlayerRecord,
+  PlayerStatsModalRecord,
   PlayerStatus,
   RecommendationRecord,
   RecommendationStatus,
@@ -75,6 +77,38 @@ export const mapApiPlayerToRecord = (player: ApiPlayer): PlayerRecord => ({
   age: player.age,
   status: player.status,
   readiness: player.status === "ACTIVE" ? 82 : player.status === "INJURED" ? 38 : 58,
+});
+
+export const mapApiPlayerDetailsToModalRecord = (
+  details: ApiPlayerDetails,
+): PlayerStatsModalRecord => ({
+  id: details.player.id,
+  fullName: details.player.fullName,
+  squadNumber: details.player.squadNumber,
+  primaryPosition: details.player.primaryPosition,
+  secondaryPosition: details.player.secondaryPosition ?? undefined,
+  positionGroup: details.player.positionGroup,
+  preferredFoot: details.player.preferredFoot,
+  age: details.player.age,
+  heightCm: details.player.heightCm ?? null,
+  status: details.player.status,
+  weeklyStats: details.weeklyPerformance
+    ? {
+        matchWeekLabel: details.matchWeek?.label ?? "Latest available week",
+        opponentName: details.matchWeek?.opponentName ?? "Opponent pending",
+        matchDate: formatDate(details.matchWeek?.matchDate),
+        trainingRating: details.weeklyPerformance.trainingRating,
+        fitness: details.weeklyPerformance.fitness,
+        fatigue: details.weeklyPerformance.fatigue,
+        morale: details.weeklyPerformance.morale,
+        availability: details.weeklyPerformance.availability,
+        injuryStatus: details.weeklyPerformance.injuryStatus,
+        suspensionStatus: details.weeklyPerformance.suspensionStatus,
+        coachNotes:
+          details.weeklyPerformance.coachNotes ??
+          "No coach notes were recorded for this player in the selected week.",
+      }
+    : null,
 });
 
 export const mapApiMatchWeekToRecord = (matchWeek: ApiMatchWeek): MatchWeekRecord => ({

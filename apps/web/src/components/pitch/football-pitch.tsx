@@ -11,6 +11,7 @@ const baseRowsByFormation: Record<RecommendationRecord["formation"], number[]> =
 type FootballPitchProps = {
   formation: RecommendationRecord["formation"];
   lineup: LineupPlayer[];
+  onPlayerClick?: (playerId: string) => void;
 };
 
 const splitRows = (formation: RecommendationRecord["formation"], lineup: LineupPlayer[]) => {
@@ -32,7 +33,7 @@ const splitRows = (formation: RecommendationRecord["formation"], lineup: LineupP
   return { goalkeeper, rows };
 };
 
-export const FootballPitch = ({ formation, lineup }: FootballPitchProps) => {
+export const FootballPitch = ({ formation, lineup, onPlayerClick }: FootballPitchProps) => {
   const { goalkeeper, rows } = splitRows(formation, lineup);
 
   return (
@@ -50,9 +51,11 @@ export const FootballPitch = ({ formation, lineup }: FootballPitchProps) => {
             {row.map((player) => (
               <PlayerMarker
                 key={player.id}
+                playerId={player.id}
                 name={player.fullName}
                 number={player.squadNumber}
                 roleLabel={player.positionLabel}
+                onClick={onPlayerClick}
               />
             ))}
           </div>
@@ -60,9 +63,11 @@ export const FootballPitch = ({ formation, lineup }: FootballPitchProps) => {
         {goalkeeper ? (
           <div className="flex justify-center">
             <PlayerMarker
+              playerId={goalkeeper.id}
               name={goalkeeper.fullName}
               number={goalkeeper.squadNumber}
               roleLabel={goalkeeper.positionLabel}
+              onClick={onPlayerClick}
             />
           </div>
         ) : null}

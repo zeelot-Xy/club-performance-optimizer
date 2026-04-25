@@ -44,6 +44,22 @@ export type ApiPlayer = {
   updatedAt: string;
 };
 
+export type ApiWeeklyPerformance = {
+  id: string;
+  matchWeekId: string;
+  playerId: string;
+  trainingRating: number;
+  fitness: number;
+  fatigue: number;
+  morale: number;
+  availability: AvailabilityStatus;
+  injuryStatus: InjuryStatus;
+  suspensionStatus: SuspensionStatus;
+  coachNotes?: string | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type ApiMatchWeek = {
   id: string;
   label: string;
@@ -98,6 +114,12 @@ export type ApiRecommendation = {
   matchWeek: ApiMatchWeek;
   generatedBy: Pick<ApiAuthUser, "id" | "fullName" | "email">;
   recommendationPlayers: ApiRecommendationPlayer[];
+};
+
+export type ApiPlayerDetails = {
+  player: ApiPlayer;
+  weeklyPerformance: (ApiWeeklyPerformance & { matchWeek?: ApiMatchWeek }) | null;
+  matchWeek: ApiMatchWeek | null;
 };
 
 export type PlayerCreateInput = {
@@ -181,4 +203,30 @@ export type DashboardStat = {
   value: string;
   trend: string;
   tone?: "default" | "success" | "warning";
+};
+
+export type PlayerStatsModalRecord = {
+  id: string;
+  fullName: string;
+  squadNumber: number;
+  primaryPosition: string;
+  secondaryPosition?: string;
+  positionGroup: PositionGroup;
+  preferredFoot: PreferredFoot;
+  age: number;
+  heightCm?: number | null;
+  status: PlayerStatus;
+  weeklyStats: {
+    matchWeekLabel: string;
+    opponentName: string;
+    matchDate: string;
+    trainingRating: number;
+    fitness: number;
+    fatigue: number;
+    morale: number;
+    availability: AvailabilityStatus;
+    injuryStatus: InjuryStatus;
+    suspensionStatus: SuspensionStatus;
+    coachNotes: string;
+  } | null;
 };

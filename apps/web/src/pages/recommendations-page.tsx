@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { RefreshCw } from "lucide-react";
 
 import { FootballPitch } from "../components/pitch/football-pitch";
+import { PlayerStatsModal } from "../components/players/player-stats-modal";
 import { FormationSelector } from "../components/recommendations/formation-selector";
 import { LineupSummary } from "../components/recommendations/lineup-summary";
 import { RecommendationExplanation } from "../components/recommendations/recommendation-explanation";
@@ -23,6 +24,7 @@ import {
 
 export const RecommendationsPage = () => {
   const [selectedMatchWeekId, setSelectedMatchWeekId] = useState<string>("");
+  const [selectedPlayerId, setSelectedPlayerId] = useState<string | null>(null);
   const { data: formations, isLoading: formationsLoading } = useFormations();
   const { data: matchWeeksData, isLoading: matchWeeksLoading, isError: matchWeeksError, error: matchWeeksQueryError } = useMatchWeeks();
   const { byMatchWeekQuery, generateRecommendation } = useRecommendations(selectedMatchWeekId || undefined);
@@ -179,7 +181,11 @@ export const RecommendationsPage = () => {
               title={`Pitch View | ${recommendation.formation}`}
               description="Review the selected starting XI in its tactical shape on the pitch."
             >
-              <FootballPitch formation={recommendation.formation} lineup={recommendation.lineup} />
+              <FootballPitch
+                formation={recommendation.formation}
+                lineup={recommendation.lineup}
+                onPlayerClick={setSelectedPlayerId}
+              />
             </SectionCard>
 
             <SectionCard
@@ -191,6 +197,13 @@ export const RecommendationsPage = () => {
           </div>
 
           <RecommendationExplanation recommendation={recommendation} />
+
+          <PlayerStatsModal
+            playerId={selectedPlayerId}
+            matchWeekId={selectedMatchWeekId}
+            isOpen={Boolean(selectedPlayerId)}
+            onClose={() => setSelectedPlayerId(null)}
+          />
         </>
       ) : null}
     </div>
