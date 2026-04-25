@@ -79,7 +79,7 @@ export const RecommendationsPage = () => {
       <PageHeader
         eyebrow="Recommendation Review"
         title="Review the recommended formation and starting lineup"
-        description="Choose a match week, generate a recommendation, and inspect the reasons behind each selection and exclusion."
+        description="Choose a match week, generate a recommendation, and inspect the fairness, readiness, and tactical reasons behind each selection and exclusion."
         actions={
           recommendation ? (
             <StatusBadge label={recommendation.status.toLowerCase()} tone={recommendationStatusTone(recommendation.status)} />
@@ -91,7 +91,7 @@ export const RecommendationsPage = () => {
 
       <SectionCard
         title="Recommendation Controls"
-        description="Choose the planning cycle to review, then run the recommendation engine for that week."
+        description="Choose the planning cycle to review, then run the recommendation engine for that active-club week."
         action={
           <button
             type="button"
@@ -171,7 +171,7 @@ export const RecommendationsPage = () => {
         <>
           <SectionCard
             title={`${recommendation.matchWeekLabel} vs ${recommendation.opponentName}`}
-            description="The formation set remains controlled on purpose, so the coach reviews a defendable shortlist rather than an opaque unrestricted search."
+            description="The formation set remains controlled on purpose, so the coach reviews a defendable shortlist that balances fairness, welfare, and tactical performance rather than an opaque unrestricted search."
           >
             <FormationSelector activeFormation={recommendation.formation} />
           </SectionCard>

@@ -20,6 +20,7 @@ export type ApiAuthUser = {
   fullName: string;
   email: string;
   role: UserRole;
+  activeClubId?: string | null;
   createdAt?: string;
   lastLoginAt?: string | null;
 };
@@ -120,6 +121,30 @@ export type ApiPlayerDetails = {
   player: ApiPlayer;
   weeklyPerformance: (ApiWeeklyPerformance & { matchWeek?: ApiMatchWeek }) | null;
   matchWeek: ApiMatchWeek | null;
+};
+
+export type ApiClub = {
+  id: string;
+  name: string;
+  shortName?: string | null;
+  provider: string;
+  externalClubId: string;
+  country?: string | null;
+  competition?: string | null;
+  crestUrl?: string | null;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type ApiClubSearchResult = {
+  provider: "football-data" | "thesportsdb";
+  externalClubId: string;
+  name: string;
+  shortName?: string | null;
+  country?: string | null;
+  competition?: string | null;
+  crestUrl?: string | null;
 };
 
 export type PlayerCreateInput = {

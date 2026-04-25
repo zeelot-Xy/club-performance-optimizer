@@ -3,6 +3,8 @@ import { Navigate, Outlet, createBrowserRouter, useLocation } from "react-router
 import { App } from "./App";
 import { LoadingState } from "./components/ui/loading-state";
 import { useAuth } from "./hooks/use-auth";
+import { useClubs } from "./hooks/use-clubs";
+import { ClubSetupPage } from "./pages/club-setup-page";
 import { DashboardPage } from "./pages/dashboard-page";
 import { LoginPage } from "./pages/login-page";
 import { MatchWeeksPage } from "./pages/match-weeks-page";
@@ -29,6 +31,48 @@ const RequireAuth = () => {
   return <Outlet />;
 };
 
+const RequireActiveClub = () => {
+  const { currentClubQuery } = useClubs();
+
+  if (currentClubQuery.isLoading) {
+    return (
+      <div className="p-6">
+        <LoadingState
+          title="Opening club workspace"
+          description="Checking which club is active before loading the planning screens."
+        />
+      </div>
+    );
+  }
+
+  if (!currentClubQuery.data) {
+    return <Navigate to="/club-setup" replace />;
+  }
+
+  return <Outlet />;
+};
+
+const RequireNoActiveClub = () => {
+  const { currentClubQuery } = useClubs();
+
+  if (currentClubQuery.isLoading) {
+    return (
+      <div className="p-6">
+        <LoadingState
+          title="Checking workspace state"
+          description="Confirming whether a club is already active for this session."
+        />
+      </div>
+    );
+  }
+
+  if (currentClubQuery.data) {
+    return <Navigate to="/" replace />;
+  }
+
+  return <Outlet />;
+};
+
 export const router = createBrowserRouter([
   {
     path: "/login",
@@ -43,20 +87,30 @@ export const router = createBrowserRouter([
         errorElement: <NotFoundPage />,
         children: [
           {
-            index: true,
-            element: <DashboardPage />,
+            path: "club-setup",
+            element: <RequireNoActiveClub />,
+            children: [{ index: true, element: <ClubSetupPage /> }],
           },
           {
-            path: "players",
-            element: <PlayersPage />,
-          },
-          {
-            path: "match-weeks",
-            element: <MatchWeeksPage />,
-          },
-          {
-            path: "recommendations",
-            element: <RecommendationsPage />,
+            element: <RequireActiveClub />,
+            children: [
+              {
+                index: true,
+                element: <DashboardPage />,
+              },
+              {
+                path: "players",
+                element: <PlayersPage />,
+              },
+              {
+                path: "match-weeks",
+                element: <MatchWeeksPage />,
+              },
+              {
+                path: "recommendations",
+                element: <RecommendationsPage />,
+              },
+            ],
           },
         ],
       },

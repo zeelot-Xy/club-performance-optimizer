@@ -27,7 +27,7 @@ export const MatchWeeksPage = () => {
       <PageHeader
         eyebrow="Weekly Planning"
         title="Track match preparation through clear weekly planning cycles"
-        description="Each match week anchors the recommendation process, helping the coach move from early preparation to a ready decision point."
+        description="Each match week anchors the recommendation process, helping the coach move from early preparation to a fair, readiness-aware decision point."
         actions={
           <button
             type="button"
@@ -70,7 +70,7 @@ export const MatchWeeksPage = () => {
       <div className="grid gap-5 xl:grid-cols-[1.1fr_0.9fr]">
         <SectionCard
           title="Match Week Register"
-          description="Review each planning cycle by opponent, date, notes, and readiness status."
+          description="Review each planning cycle by opponent, date, notes, and readiness status for the active club."
         >
           {isLoading ? <LoadingState title="Loading match weeks" /> : null}
           {isError ? (
@@ -107,7 +107,7 @@ export const MatchWeeksPage = () => {
         <div className="space-y-5">
           <SectionCard
             title="Active Week Summary"
-            description="This panel highlights the planning cycle that currently deserves the coach's attention."
+            description="This panel highlights the planning cycle that currently deserves the coach's attention in the active club workspace."
           >
             {activeWeek ? (
               <div className="space-y-4">

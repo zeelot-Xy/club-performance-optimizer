@@ -41,7 +41,7 @@ export const DashboardPage = () => {
       <PageHeader
         eyebrow="Weekly Overview"
         title="Review squad readiness and weekly decision context"
-        description="This dashboard brings together the current squad picture, match preparation status, and the latest recommendation summary in one calm operational view."
+        description="This dashboard brings together the active club squad picture, match preparation status, and the latest explainable recommendation summary in one calm operational view."
         actions={
           activeMatchWeek ? (
             <StatusBadge
@@ -78,7 +78,7 @@ export const DashboardPage = () => {
 
         <SectionCard
           title="Current Match Activity"
-          description="Use this section to confirm whether the current planning cycle is ready for recommendation review."
+          description="Use this section to confirm whether the current planning cycle is ready for a fair, readiness-aware recommendation review."
         >
           <div className="grid gap-3">
             <article className="rounded-[1.4rem] border border-[var(--color-border)] bg-[rgba(255,255,255,0.72)] p-4">
@@ -106,7 +106,7 @@ export const DashboardPage = () => {
               <p className="mt-2 text-sm leading-6 text-[var(--color-text-muted)]">
                 {latestRecommendation
                   ? latestRecommendation.summary
-                  : "Generate a recommendation from the Recommendations page after selecting a ready match week."}
+                  : "Generate a recommendation from the Recommendations page after selecting a ready match week for the active club."}
               </p>
             </article>
 
@@ -116,7 +116,7 @@ export const DashboardPage = () => {
                 {players.length} players | {matchWeeks.length} match weeks
               </p>
               <p className="mt-2 text-sm leading-6 text-[var(--color-text-muted)]">
-                This snapshot gives a quick sense of how much current planning information is already available in the system.
+                This snapshot gives a quick sense of how much planning information is already available for the currently active club workspace.
               </p>
             </article>
           </div>

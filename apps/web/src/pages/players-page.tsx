@@ -25,8 +25,8 @@ export const PlayersPage = () => {
     <div className="space-y-6">
       <PageHeader
         eyebrow="Squad Overview"
-        title="Manage the club squad in one controlled workspace"
-        description="Review registered players, add new squad members, and keep the weekly selection pool accurate for recommendation runs."
+        title="Manage the active club squad in one controlled workspace"
+        description="Review registered players, add new squad members, and keep the weekly selection pool accurate for fair and explainable recommendation runs."
         actions={
           <div className="flex gap-3">
             <div className="flex items-center gap-2 rounded-2xl border border-[var(--color-border)] bg-white/70 px-4 py-3 text-sm text-[var(--color-text-muted)]">
@@ -48,7 +48,7 @@ export const PlayersPage = () => {
       {showCreateForm ? (
         <SectionCard
           title="Create Player"
-          description="Add a squad member with the core profile details needed for weekly planning and recommendation eligibility."
+        description="Add a squad member with the core profile details needed for weekly planning and recommendation eligibility."
         >
           <PlayerForm
             isSubmitting={createPlayer.isPending}
@@ -74,7 +74,7 @@ export const PlayersPage = () => {
 
       <SectionCard
         title="Registered Squad"
-        description="This register shows the current one-club squad and the main profile details used across the planning workflow."
+        description="This register shows the active club squad and the main profile details used across the planning workflow."
       >
         {isLoading ? <LoadingState title="Loading players" /> : null}
         {isError ? (
