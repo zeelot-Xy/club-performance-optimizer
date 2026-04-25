@@ -23,13 +23,13 @@ export const PlayersPage = () => {
     <div className="space-y-6">
       <PageHeader
         eyebrow="Squad Overview"
-        title="A controlled one-club player view now connected to the backend"
-        description="The players screen now reads from the real API and can also create new squad entries. Recommendation logic still remains entirely on the backend."
+        title="Manage the club squad in one controlled workspace"
+        description="Review registered players, add new squad members, and keep the weekly selection pool accurate for recommendation runs."
         actions={
           <div className="flex gap-3">
             <div className="flex items-center gap-2 rounded-2xl border border-[var(--color-border)] bg-white/70 px-4 py-3 text-sm text-[var(--color-text-muted)]">
               <Search className="h-4 w-4" />
-              Live API table
+              Squad register
             </div>
             <button
               type="button"
@@ -46,7 +46,7 @@ export const PlayersPage = () => {
       {showCreateForm ? (
         <SectionCard
           title="Create Player"
-          description="This lightweight form posts directly to the backend players module and refreshes the table on success."
+          description="Add a squad member with the core profile details needed for weekly planning and recommendation eligibility."
         >
           <PlayerForm
             isSubmitting={createPlayer.isPending}
@@ -62,7 +62,7 @@ export const PlayersPage = () => {
                 description={
                   createPlayer.error instanceof Error
                     ? createPlayer.error.message
-                    : "The backend rejected the player payload."
+                    : "The player details could not be saved."
                 }
               />
             </div>
@@ -72,19 +72,19 @@ export const PlayersPage = () => {
 
       <SectionCard
         title="Registered Squad"
-        description="This table is now backed by the real players endpoint and stays aligned with the single-club project scope."
+        description="This register shows the current one-club squad and the main profile details used across the planning workflow."
       >
         {isLoading ? <LoadingState title="Loading players" /> : null}
         {isError ? (
           <ErrorState
             title="Players could not be loaded"
-            description={error instanceof Error ? error.message : "The players endpoint did not respond as expected."}
+            description={error instanceof Error ? error.message : "The player register is not available right now."}
           />
         ) : null}
         {!isLoading && !isError && !players.length ? (
           <EmptyState
             title="No players registered yet"
-            description="Create the first squad member from this page, then the rest of the dashboard will start reflecting live data."
+            description="Add the first squad member from this page to begin building the player pool for weekly recommendations."
           />
         ) : null}
         {!isLoading && !isError && players.length ? (

@@ -12,7 +12,7 @@ export const LoginPage = () => {
 
   const helperText = useMemo(
     () =>
-      "Use the seeded development credential for Phase 10 integration: admin@club.local / Admin123!",
+      "For local testing, sign in with the prepared Coach/Admin account: admin@club.local / Admin123!",
     [],
   );
 
@@ -28,19 +28,19 @@ export const LoginPage = () => {
             <p className="text-xs font-semibold uppercase tracking-[0.34em] text-[rgba(248,250,247,0.56)]">Coach Console</p>
             <h1 className="mt-4 text-4xl font-semibold tracking-[-0.04em]">Club Performance and Formation Optimizer</h1>
             <p className="mt-5 text-sm leading-7 text-[rgba(248,250,247,0.78)]">
-              The frontend is now wired to the real backend API. Sign in to review players, match weeks, and explainable recommendations from the live service layer.
+              Sign in to review squad records, weekly preparation status, and explainable lineup recommendations for the club.
             </p>
             <div className="mt-8 rounded-[1.8rem] border border-[rgba(248,250,247,0.08)] bg-[rgba(248,250,247,0.05)] p-5">
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[rgba(248,250,247,0.6)]">Integration Note</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[rgba(248,250,247,0.6)]">Local Access</p>
               <p className="mt-3 text-sm leading-7 text-[rgba(248,250,247,0.82)]">{helperText}</p>
             </div>
           </section>
 
           <section className="rounded-[2.4rem] border border-[var(--color-border)] bg-[rgba(255,255,255,0.9)] p-8 shadow-[var(--shadow-card)]">
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[var(--color-text-muted)]">Phase 10</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[var(--color-text-muted)]">Secure Sign-In</p>
             <h2 className="mt-4 text-3xl font-semibold tracking-[-0.03em] text-[var(--color-text-strong)]">Sign in</h2>
             <p className="mt-3 text-sm leading-7 text-[var(--color-text-muted)]">
-              Auth state is now persisted locally and verified against the backend using TanStack Query.
+              Use your Coach/Admin account to open the weekly decision-support workspace.
             </p>
 
             <div className="mt-8">

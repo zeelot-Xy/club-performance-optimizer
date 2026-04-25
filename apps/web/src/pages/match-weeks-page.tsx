@@ -26,8 +26,8 @@ export const MatchWeeksPage = () => {
     <div className="space-y-6">
       <PageHeader
         eyebrow="Weekly Planning"
-        title="Track match preparation as discrete backend-backed planning cycles"
-        description="Each match week is now loaded from the API and can be created from this page. This keeps the recommendation workflow anchored to one explicit weekly planning unit."
+        title="Track match preparation through clear weekly planning cycles"
+        description="Each match week anchors the recommendation process, helping the coach move from early preparation to a ready decision point."
         actions={
           <button
             type="button"
@@ -43,7 +43,7 @@ export const MatchWeeksPage = () => {
       {showCreateForm ? (
         <SectionCard
           title="Create Match Week"
-          description="This form posts directly to the backend match weeks module and refreshes the planning register when successful."
+          description="Create a planning cycle with the opponent, date, and coaching notes that will guide the recommendation run."
         >
           <MatchWeekForm
             isSubmitting={createMatchWeek.isPending}
@@ -59,7 +59,7 @@ export const MatchWeeksPage = () => {
                 description={
                   createMatchWeek.error instanceof Error
                     ? createMatchWeek.error.message
-                    : "The backend rejected the match week payload."
+                    : "The match week details could not be saved."
                 }
               />
             </div>
@@ -70,13 +70,13 @@ export const MatchWeeksPage = () => {
       <div className="grid gap-5 xl:grid-cols-[1.1fr_0.9fr]">
         <SectionCard
           title="Match Week Register"
-          description="Statuses now come from real backend records and distinguish draft planning, ready cycles, and completed weeks."
+          description="Review each planning cycle by opponent, date, notes, and readiness status."
         >
           {isLoading ? <LoadingState title="Loading match weeks" /> : null}
           {isError ? (
             <ErrorState
               title="Match weeks could not be loaded"
-              description={error instanceof Error ? error.message : "The match weeks endpoint did not respond as expected."}
+              description={error instanceof Error ? error.message : "The match week register is not available right now."}
             />
           ) : null}
           {!isLoading && !isError && !matchWeeks.length ? (
@@ -107,7 +107,7 @@ export const MatchWeeksPage = () => {
         <div className="space-y-5">
           <SectionCard
             title="Active Week Summary"
-            description="The right panel now reflects the active backend record instead of a static placeholder week."
+            description="This panel highlights the planning cycle that currently deserves the coach's attention."
           >
             {activeWeek ? (
               <div className="space-y-4">

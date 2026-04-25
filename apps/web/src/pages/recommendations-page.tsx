@@ -14,7 +14,12 @@ import { StatusBadge } from "../components/ui/status-badge";
 import { useFormations } from "../hooks/use-formations";
 import { useMatchWeeks } from "../hooks/use-match-weeks";
 import { useRecommendations } from "../hooks/use-recommendations";
-import { mapApiMatchWeekToRecord, mapApiRecommendationToRecord, matchWeekStatusTone, recommendationStatusTone } from "../lib/formatters";
+import {
+  mapApiMatchWeekToRecord,
+  mapApiRecommendationToRecord,
+  matchWeekStatusTone,
+  recommendationStatusTone,
+} from "../lib/formatters";
 
 export const RecommendationsPage = () => {
   const [selectedMatchWeekId, setSelectedMatchWeekId] = useState<string>("");
@@ -49,7 +54,7 @@ export const RecommendationsPage = () => {
     return (
       <LoadingState
         title="Loading recommendation workspace"
-        description="Fetching live formations, match weeks, and stored recommendations from the backend."
+        description="Preparing formations, match weeks, and the latest recommendation details."
       />
     );
   }
@@ -71,8 +76,8 @@ export const RecommendationsPage = () => {
     <div className="space-y-6">
       <PageHeader
         eyebrow="Recommendation Review"
-        title="Explainable lineup guidance now driven by backend generation"
-        description="This page now loads real recommendation records, lets the coach choose a match week, and can trigger a new backend generation run from the UI."
+        title="Review the recommended formation and starting lineup"
+        description="Choose a match week, generate a recommendation, and inspect the reasons behind each selection and exclusion."
         actions={
           recommendation ? (
             <StatusBadge label={recommendation.status.toLowerCase()} tone={recommendationStatusTone(recommendation.status)} />
@@ -84,7 +89,7 @@ export const RecommendationsPage = () => {
 
       <SectionCard
         title="Recommendation Controls"
-        description="Choose the planning cycle to review, then trigger the recommendation engine. The final lineup and its explanations always come from the backend."
+        description="Choose the planning cycle to review, then run the recommendation engine for that week."
         action={
           <button
             type="button"
@@ -108,7 +113,7 @@ export const RecommendationsPage = () => {
               <option value="">Select a match week</option>
               {matchWeeks.map((week) => (
                 <option key={week.id} value={week.id}>
-                  {week.label} · {week.opponentName}
+                  {week.label} | {week.opponentName}
                 </option>
               ))}
             </select>
@@ -117,7 +122,7 @@ export const RecommendationsPage = () => {
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-text-muted)]">Supported formations</p>
             <p className="mt-2 text-sm leading-7 text-[var(--color-text-muted)]">
               {formations?.map((formation) => formation.code).join(", ") ??
-                "No active formations returned by the backend."}
+                "No formations are available at the moment."}
             </p>
           </div>
         </div>
@@ -128,7 +133,7 @@ export const RecommendationsPage = () => {
               description={
                 generateRecommendation.error instanceof Error
                   ? generateRecommendation.error.message
-                  : "The backend could not generate a recommendation for this match week."
+                  : "The recommendation could not be generated for this match week."
               }
             />
           </div>
@@ -148,7 +153,7 @@ export const RecommendationsPage = () => {
           description={
             byMatchWeekQuery.error instanceof Error
               ? byMatchWeekQuery.error.message
-              : "The recommendation endpoint returned an unexpected error."
+              : "The recommendation record is not available right now."
           }
         />
       ) : null}
@@ -171,15 +176,15 @@ export const RecommendationsPage = () => {
 
           <div className="grid gap-5 2xl:grid-cols-[1.08fr_0.92fr]">
             <SectionCard
-              title={`Pitch View · ${recommendation.formation}`}
-              description="The pitch view is now driven by the backend-selected starting XI and its tactical grouping."
+              title={`Pitch View | ${recommendation.formation}`}
+              description="Review the selected starting XI in its tactical shape on the pitch."
             >
               <FootballPitch formation={recommendation.formation} lineup={recommendation.lineup} />
             </SectionCard>
 
             <SectionCard
               title="Starting XI Summary"
-              description="These player reasons are displayed exactly from backend-generated selection reasoning, not recreated in the browser."
+              description="Each selected player is listed with the main reason they were preferred for this week's lineup."
             >
               <LineupSummary recommendation={recommendation} />
             </SectionCard>

@@ -17,7 +17,7 @@ const RequireAuth = () => {
   if (isLoading) {
     return (
       <div className="p-6">
-        <LoadingState title="Restoring session" description="Validating the local Coach/Admin session with the backend API." />
+        <LoadingState title="Restoring session" description="Checking your Coach/Admin session before opening the workspace." />
       </div>
     );
   }

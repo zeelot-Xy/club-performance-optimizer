@@ -6,8 +6,8 @@ import { PageHeader } from "../components/ui/page-header";
 import { SectionCard } from "../components/ui/section-card";
 import { StatCard } from "../components/ui/stat-card";
 import { StatusBadge } from "../components/ui/status-badge";
-import { matchWeekStatusTone, recommendationStatusTone } from "../lib/formatters";
 import { useDashboard } from "../hooks/use-dashboard";
+import { matchWeekStatusTone, recommendationStatusTone } from "../lib/formatters";
 
 export const DashboardPage = () => {
   const {
@@ -24,14 +24,14 @@ export const DashboardPage = () => {
   } = useDashboard();
 
   if (isLoading) {
-    return <LoadingState title="Loading dashboard" description="Fetching live players, match weeks, and recommendations from the backend." />;
+    return <LoadingState title="Loading dashboard" description="Gathering squad, match week, and recommendation information." />;
   }
 
   if (isError) {
     return (
       <ErrorState
         title="Dashboard data could not be loaded"
-        description={error instanceof Error ? error.message : "The backend did not return dashboard data."}
+        description={error instanceof Error ? error.message : "The dashboard information is not available right now."}
       />
     );
   }
@@ -39,9 +39,9 @@ export const DashboardPage = () => {
   return (
     <div className="space-y-6">
       <PageHeader
-        eyebrow="Phase 10 Integration"
-        title="A calm tactical dashboard now backed by the real API"
-        description="The dashboard no longer depends on Phase 9 mock state for its core views. Players, match weeks, and recommendation summaries are now derived from the backend using TanStack Query."
+        eyebrow="Weekly Overview"
+        title="Review squad readiness and weekly decision context"
+        description="This dashboard brings together the current squad picture, match preparation status, and the latest recommendation summary in one calm operational view."
         actions={
           activeMatchWeek ? (
             <StatusBadge
@@ -61,7 +61,7 @@ export const DashboardPage = () => {
       <div className="grid gap-5 xl:grid-cols-[1.2fr_0.8fr]">
         <SectionCard
           title="Availability by Unit"
-          description="This view derives a simple unit-readiness proxy from the live player registry, showing how much of each tactical group remains active for selection."
+          description="This view compares how much of each tactical unit remains available for selection ahead of the next recommendation."
         >
           <div className="h-[280px]">
             <ResponsiveContainer width="100%" height="100%">
@@ -78,7 +78,7 @@ export const DashboardPage = () => {
 
         <SectionCard
           title="Current Match Activity"
-          description="Live backend records are summarized here so the coach can immediately see whether the weekly planning cycle is ready for recommendation review."
+          description="Use this section to confirm whether the current planning cycle is ready for recommendation review."
         >
           <div className="grid gap-3">
             <article className="rounded-[1.4rem] border border-[var(--color-border)] bg-[rgba(255,255,255,0.72)] p-4">
@@ -113,10 +113,10 @@ export const DashboardPage = () => {
             <article className="rounded-[1.4rem] border border-[var(--color-border)] bg-[rgba(255,255,255,0.72)] p-4">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-text-muted)]">Registry Snapshot</p>
               <p className="mt-2 text-lg font-semibold text-[var(--color-text-strong)]">
-                {players.length} players · {matchWeeks.length} match weeks
+                {players.length} players | {matchWeeks.length} match weeks
               </p>
               <p className="mt-2 text-sm leading-6 text-[var(--color-text-muted)]">
-                This confirms the frontend is drawing from the persisted backend dataset rather than local placeholders.
+                This snapshot gives a quick sense of how much current planning information is already available in the system.
               </p>
             </article>
           </div>
@@ -126,7 +126,7 @@ export const DashboardPage = () => {
       <div className="grid gap-5 xl:grid-cols-[0.95fr_1.05fr]">
         <SectionCard
           title="Weekly Progress Trend"
-          description="A restrained progression view is derived from real match week statuses to show how preparation is moving across recent planning cycles."
+          description="Track how recent planning cycles have progressed from draft preparation to recommendation-ready status."
         >
           <div className="h-[280px]">
             <ResponsiveContainer width="100%" height="100%">
@@ -149,7 +149,7 @@ export const DashboardPage = () => {
 
         <SectionCard
           title="Recent Match Weeks"
-          description="Recent planning cycles are listed from backend records so the coach can compare readiness stages and tactical notes."
+          description="Review recent planning cycles, their readiness stages, and the tactical notes recorded for each one."
         >
           <div className="grid gap-3">
             {matchWeeks.length ? (

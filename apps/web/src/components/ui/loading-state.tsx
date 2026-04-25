@@ -5,7 +5,7 @@ type LoadingStateProps = {
 
 export const LoadingState = ({
   title = "Loading data",
-  description = "The interface is synchronizing with the backend services.",
+  description = "The system is preparing the latest club records for review.",
 }: LoadingStateProps) => (
   <div className="flex flex-col items-center justify-center rounded-3xl border border-[var(--color-border)] bg-[rgba(255,255,255,0.72)] px-6 py-12 text-center">
     <div className="h-12 w-12 animate-spin rounded-full border-4 border-[rgba(15,44,34,0.12)] border-t-[var(--color-primary)]" />
