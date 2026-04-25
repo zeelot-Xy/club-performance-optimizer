@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Navigate } from "react-router-dom";
 
 import { LoginForm } from "../components/auth/login-form";
@@ -9,12 +9,6 @@ export const LoginPage = () => {
   const { isAuthenticated, isLoading, login } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
-  const helperText = useMemo(
-    () =>
-      "For local testing, sign in with the prepared Coach/Admin account: admin@club.local / Admin123!",
-    [],
-  );
 
   if (isAuthenticated) {
     return <Navigate to="/" replace />;
@@ -31,8 +25,10 @@ export const LoginPage = () => {
               Sign in to review squad records, weekly preparation status, and explainable lineup recommendations for the club.
             </p>
             <div className="mt-8 rounded-[1.8rem] border border-[rgba(248,250,247,0.08)] bg-[rgba(248,250,247,0.05)] p-5">
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[rgba(248,250,247,0.6)]">Local Access</p>
-              <p className="mt-3 text-sm leading-7 text-[rgba(248,250,247,0.82)]">{helperText}</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[rgba(248,250,247,0.6)]">Decision Support</p>
+              <p className="mt-3 text-sm leading-7 text-[rgba(248,250,247,0.82)]">
+                Use this workspace to review the squad, prepare each match week, and generate an explainable starting lineup and formation.
+              </p>
             </div>
           </section>
 
