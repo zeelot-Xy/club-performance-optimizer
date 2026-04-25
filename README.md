@@ -1,22 +1,22 @@
-# AI-Based Football Club Player Performance Analysis and Weekly Formation Optimization System
+# AI-Based Football Club Player Performance Analysis and Explainable Weekly Lineup Recommendation System
 
 ## Overview
-This project is a web-based intelligent decision-support system for one football club. It analyzes player performance and recommends an optimal weekly formation and starting lineup for the coach/admin.
+This project is a web-based intelligent decision-support system for a selected football club at a time. It analyzes player performance, weekly readiness, and tactical fit to recommend an explainable weekly formation and starting lineup for the coach/admin.
 
 ## Academic Focus
 The system is designed as a realistic, explainable, and finishable final-year project. It prioritizes maintainability, transparency, and technical defensibility over unnecessary complexity.
 
 ## Official Academic Title
-AI-Based Football Club Player Performance Analysis and Weekly Formation Optimization System for Weekly Match Decision Support
+AI-Based Football Club Player Performance Analysis and Explainable Weekly Lineup Recommendation System
 
 ## Internal Product Title
-Club Performance and Formation Optimizer
+Explainable Club Selection and Formation Recommendation System
 
 ## Academic Problem Statement
-This project develops a web-based decision-support system for a single football club that analyzes weekly player performance indicators and recommends an explainable starting lineup and formation for upcoming matches.
+This project develops a web-based decision-support system that operates on one selected club at a time, analyzes weekly player performance indicators, and recommends an explainable starting lineup and formation for upcoming matches.
 
 ## Strict Scope
-- One football club only
+- One active club workspace at a time
 - Maximum 25 players in demo dataset
 - Weekly recommendations only
 - No live tracking
@@ -26,11 +26,12 @@ This project develops a web-based decision-support system for a single football 
 - No scouting features
 - Coach/Admin is the only user
 - Recommendations must remain explainable
+- External football APIs are import sources only, not runtime recommendation dependencies
 
 ## Core Technology Stack
 - Frontend: React 18, Vite, TypeScript, Tailwind CSS v4, Recharts, React Router v7, TanStack Query, Lucide React
 - Backend: Node.js 20, Express, TypeScript, Prisma ORM, PostgreSQL, Zod, JWT, Helmet
-- AI/ML: Python 3.11, FastAPI, scikit-learn, pandas, joblib
+- AI/ML: Python 3.11+, FastAPI, scikit-learn, pandas, joblib
 - Deployment: Docker Compose
 
 ## Development Philosophy
@@ -156,11 +157,12 @@ This project develops a web-based decision-support system for a single football 
 - ML support is appended through the AI service when available and stored in `mlSupportSummary`
 
 ## Contribution Rules
-- Keep the scope locked to one club and weekly recommendations
+- Keep the scope locked to one selected club workspace at a time and weekly recommendations
 - Prioritize explainability before machine learning complexity
 - Prefer TypeScript for JavaScript-facing services and tooling
 - Keep business logic in service layers, not controllers or UI components
 - Document any scope changes before implementation
+- Keep fairness, player welfare, and performance optimization balanced in both UI copy and technical documentation
 
 ## Status
 Phase 13 final polishing and defense preparation completed. The repository now includes submission-facing checklists, a demo script, defense talking points, likely examiner questions, and a final-readiness documentation layer on top of the implemented system.

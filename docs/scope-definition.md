@@ -1,8 +1,9 @@
 # Scope Definition
 
 ## In Scope
-- Single football club
+- One selected football club workspace at a time
 - Player profile management
+- Club import and activation workflow
 - Weekly synthetic performance data
 - Rule-based player scoring
 - Formation recommendation
@@ -12,7 +13,7 @@
 - Web dashboard for Coach/Admin
 
 ## Out of Scope
-- Multi-club support
+- Simultaneous multi-club comparison
 - Live match tracking
 - Video analysis
 - GPS/wearable analytics
@@ -20,7 +21,7 @@
 - Opponent scouting engine
 - Mobile app
 - Public user access
-- Automated real-time data ingestion
+- Automated real-time data ingestion during recommendation generation
 
 ## Reason for Scope Control
-The project is intentionally constrained to remain realistic, academically strong, and fully implementable within a final-year project timeline.
+The project is intentionally constrained to remain realistic, academically strong, and fully implementable within a final-year project timeline while still allowing a real club to be imported into one active workspace at a time.
