@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 
 import { RecommendationsPage } from "./recommendations-page";
@@ -7,6 +7,7 @@ const useFormationsMock = vi.fn();
 const useMatchWeeksMock = vi.fn();
 const useRecommendationsMock = vi.fn();
 const usePlayerDetailsMock = vi.fn();
+const useClubsMock = vi.fn();
 
 vi.mock("../hooks/use-formations", () => ({
   useFormations: () => useFormationsMock(),
@@ -25,6 +26,10 @@ vi.mock("../hooks/use-player-details", () => ({
     usePlayerDetailsMock(playerId, matchWeekId),
 }));
 
+vi.mock("../hooks/use-clubs", () => ({
+  useClubs: () => useClubsMock(),
+}));
+
 describe("RecommendationsPage", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -34,13 +39,18 @@ describe("RecommendationsPage", () => {
       isError: false,
       error: null,
     });
+    useClubsMock.mockReturnValue({
+      currentClubQuery: {
+        data: { id: "club-1", name: "Manchester United" },
+      },
+    });
     useFormationsMock.mockReturnValue({
       data: [{ id: "formation-1", code: "4-3-3" }],
       isLoading: false,
     });
   });
 
-  it("renders the empty recommendation state when no recommendation exists for the selected week", () => {
+  it("renders the empty recommendation state when no recommendation exists for the selected week", async () => {
     useMatchWeeksMock.mockReturnValue({
       data: [
         {
@@ -65,11 +75,13 @@ describe("RecommendationsPage", () => {
 
     render(<RecommendationsPage />);
 
-    expect(screen.getByText(/No recommendation stored for this match week yet/i)).toBeInTheDocument();
+    expect(
+      await screen.findByText(/No recommendation stored for this match week yet/i),
+    ).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Generate recommendation/i })).toBeInTheDocument();
   });
 
-  it("renders backend recommendation details and triggers generation when requested", () => {
+  it("renders backend recommendation details and triggers generation when requested", async () => {
     const mutate = vi.fn();
 
     useMatchWeeksMock.mockReturnValue({
@@ -167,11 +179,13 @@ describe("RecommendationsPage", () => {
 
     render(<RecommendationsPage />);
 
-    expect(screen.getByText(/The backend selected 4-3-3/i)).toBeInTheDocument();
+    expect(await screen.findByText(/The backend selected 4-3-3/i)).toBeInTheDocument();
     expect(screen.getAllByText(/Michael Etim/i).length).toBeGreaterThan(0);
 
     fireEvent.click(screen.getByRole("button", { name: /Generate recommendation/i }));
-    expect(mutate).toHaveBeenCalledWith("week-1");
+    await waitFor(() => {
+      expect(mutate).toHaveBeenCalledWith("week-1");
+    });
   });
 
   it("opens the same player details modal when a pitch marker is clicked", () => {
@@ -318,6 +332,16 @@ describe("RecommendationsPage", () => {
           createdAt: "2026-04-24T12:00:00.000Z",
           updatedAt: "2026-04-24T12:00:00.000Z",
         },
+        recentPerformanceSummary: {
+          matchesConsidered: 0,
+          totalMinutes: 0,
+          totalGoals: 0,
+          totalAssists: 0,
+          totalSaves: 0,
+          cleanSheets: 0,
+          averageRating: null,
+        },
+        recentPerformanceHistory: [],
       },
       isLoading: false,
       isError: false,

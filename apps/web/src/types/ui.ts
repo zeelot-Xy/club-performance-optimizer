@@ -121,6 +121,31 @@ export type ApiPlayerDetails = {
   player: ApiPlayer;
   weeklyPerformance: (ApiWeeklyPerformance & { matchWeek?: ApiMatchWeek }) | null;
   matchWeek: ApiMatchWeek | null;
+  recentPerformanceSummary: {
+    matchesConsidered: number;
+    totalMinutes: number;
+    totalGoals: number;
+    totalAssists: number;
+    totalSaves: number;
+    cleanSheets: number;
+    averageRating?: number | null;
+  };
+  recentPerformanceHistory: Array<{
+    id: string;
+    matchDate: string;
+    opponentName: string;
+    competition?: string | null;
+    venue?: string | null;
+    result?: string | null;
+    minutes?: number | null;
+    goals: number;
+    assists: number;
+    rating?: number | null;
+    cleanSheet?: boolean | null;
+    saves?: number | null;
+    yellowCards: number;
+    redCards: number;
+  }>;
 };
 
 export type ApiClub = {
@@ -135,6 +160,12 @@ export type ApiClub = {
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
+  importSummary: {
+    playerCount: number;
+    importedMatchCount: number;
+    importedPlayerStatCount: number;
+    baselineWeeklyCount: number;
+  };
 };
 
 export type ApiClubSearchResult = {
@@ -145,6 +176,18 @@ export type ApiClubSearchResult = {
   country?: string | null;
   competition?: string | null;
   crestUrl?: string | null;
+};
+
+export type ApiClubImportResult = {
+  club: ApiClub;
+  importSummary: {
+    playerCount: number;
+    importedMatchCount: number;
+    importedPlayerStatCount: number;
+    baselineWeeklyCount: number;
+    planningWeekId: string;
+  };
+  providerDiagnostics: string[];
 };
 
 export type PlayerCreateInput = {
@@ -254,4 +297,26 @@ export type PlayerStatsModalRecord = {
     suspensionStatus: SuspensionStatus;
     coachNotes: string;
   } | null;
+  recentPerformanceSummary: {
+    matchesConsidered: number;
+    totalMinutes: number;
+    totalGoals: number;
+    totalAssists: number;
+    totalSaves: number;
+    cleanSheets: number;
+    averageRating?: number | null;
+  };
+  recentPerformanceHistory: Array<{
+    id: string;
+    matchDate: string;
+    opponentName: string;
+    competition: string;
+    result: string;
+    minutes: string;
+    goals: number;
+    assists: number;
+    rating: string;
+    defensiveNote: string;
+    discipline: string;
+  }>;
 };

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { RefreshCw } from "lucide-react";
 
 import { FootballPitch } from "../components/pitch/football-pitch";
@@ -12,6 +12,7 @@ import { LoadingState } from "../components/ui/loading-state";
 import { PageHeader } from "../components/ui/page-header";
 import { SectionCard } from "../components/ui/section-card";
 import { StatusBadge } from "../components/ui/status-badge";
+import { useClubs } from "../hooks/use-clubs";
 import { useFormations } from "../hooks/use-formations";
 import { useMatchWeeks } from "../hooks/use-match-weeks";
 import { useRecommendations } from "../hooks/use-recommendations";
@@ -25,6 +26,8 @@ import {
 export const RecommendationsPage = () => {
   const [selectedMatchWeekId, setSelectedMatchWeekId] = useState<string>("");
   const [selectedPlayerId, setSelectedPlayerId] = useState<string | null>(null);
+  const previousClubIdRef = useRef<string | null>(null);
+  const { currentClubQuery } = useClubs();
   const { data: formations, isLoading: formationsLoading } = useFormations();
   const { data: matchWeeksData, isLoading: matchWeeksLoading, isError: matchWeeksError, error: matchWeeksQueryError } = useMatchWeeks();
   const { byMatchWeekQuery, generateRecommendation } = useRecommendations(selectedMatchWeekId || undefined);
@@ -44,6 +47,21 @@ export const RecommendationsPage = () => {
       setSelectedMatchWeekId(preferred.id);
     }
   }, [selectedMatchWeekId, matchWeeksData]);
+
+  useEffect(() => {
+    const nextClubId = currentClubQuery.data?.id ?? null;
+
+    if (previousClubIdRef.current === null) {
+      previousClubIdRef.current = nextClubId;
+      return;
+    }
+
+    if (previousClubIdRef.current !== nextClubId) {
+      setSelectedMatchWeekId("");
+      setSelectedPlayerId(null);
+      previousClubIdRef.current = nextClubId;
+    }
+  }, [currentClubQuery.data?.id]);
 
   const selectedMatchWeek = matchWeeks.find((week) => week.id === selectedMatchWeekId);
   const recommendation = byMatchWeekQuery.data

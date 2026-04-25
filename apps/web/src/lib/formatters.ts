@@ -109,6 +109,25 @@ export const mapApiPlayerDetailsToModalRecord = (
           "No coach notes were recorded for this player in the selected week.",
       }
     : null,
+  recentPerformanceSummary: details.recentPerformanceSummary,
+  recentPerformanceHistory: details.recentPerformanceHistory.map((entry) => ({
+    id: entry.id,
+    matchDate: formatDate(entry.matchDate),
+    opponentName: entry.opponentName,
+    competition: entry.competition ?? "Competition not set",
+    result: entry.result ?? "Result not available",
+    minutes: entry.minutes !== null && entry.minutes !== undefined ? `${entry.minutes} mins` : "Minutes not available",
+    goals: entry.goals,
+    assists: entry.assists,
+    rating: entry.rating !== null && entry.rating !== undefined ? entry.rating.toFixed(1) : "N/A",
+    defensiveNote:
+      entry.cleanSheet
+        ? "Clean sheet recorded"
+        : entry.saves
+          ? `${entry.saves} saves`
+          : "No defensive event recorded",
+    discipline: `${entry.yellowCards} YC | ${entry.redCards} RC`,
+  })),
 });
 
 export const mapApiMatchWeekToRecord = (matchWeek: ApiMatchWeek): MatchWeekRecord => ({

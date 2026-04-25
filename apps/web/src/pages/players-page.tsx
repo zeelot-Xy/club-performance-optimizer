@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Plus, Search } from "lucide-react";
 
 import { PlayerForm } from "../components/forms/player-form";
@@ -10,6 +10,7 @@ import { LoadingState } from "../components/ui/loading-state";
 import { PageHeader } from "../components/ui/page-header";
 import { SectionCard } from "../components/ui/section-card";
 import { StatusBadge } from "../components/ui/status-badge";
+import { useClubs } from "../hooks/use-clubs";
 import { usePlayers } from "../hooks/use-players";
 import { mapApiPlayerToRecord, playerStatusTone, toTitleCase } from "../lib/formatters";
 import type { PlayerCreateInput } from "../types/ui";
@@ -17,9 +18,15 @@ import type { PlayerCreateInput } from "../types/ui";
 export const PlayersPage = () => {
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [selectedPlayerId, setSelectedPlayerId] = useState<string | null>(null);
+  const { currentClubQuery } = useClubs();
   const { data, isLoading, isError, error, createPlayer } = usePlayers();
 
   const players = useMemo(() => (data ?? []).map(mapApiPlayerToRecord), [data]);
+
+  useEffect(() => {
+    setSelectedPlayerId(null);
+    setShowCreateForm(false);
+  }, [currentClubQuery.data?.id]);
 
   return (
     <div className="space-y-6">

@@ -1,13 +1,17 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { apiClient } from "../lib/api-client";
+import { useClubs } from "./use-clubs";
 import type { ApiMatchWeek, MatchWeekCreateInput } from "../types/ui";
 
 export const useMatchWeeks = () => {
   const queryClient = useQueryClient();
+  const { currentClubQuery } = useClubs();
+  const activeClubId = currentClubQuery.data?.id;
 
   const query = useQuery({
-    queryKey: ["match-weeks"],
+    queryKey: ["match-weeks", activeClubId ?? "no-club"],
+    enabled: Boolean(activeClubId),
     queryFn: () => apiClient.get<ApiMatchWeek[]>("/match-weeks"),
   });
 

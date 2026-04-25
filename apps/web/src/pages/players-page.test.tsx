@@ -5,6 +5,7 @@ import { PlayersPage } from "./players-page";
 
 const usePlayersMock = vi.fn();
 const usePlayerDetailsMock = vi.fn();
+const useClubsMock = vi.fn();
 
 vi.mock("../hooks/use-players", () => ({
   usePlayers: () => usePlayersMock(),
@@ -13,6 +14,10 @@ vi.mock("../hooks/use-players", () => ({
 vi.mock("../hooks/use-player-details", () => ({
   usePlayerDetails: (playerId?: string | null, matchWeekId?: string | null) =>
     usePlayerDetailsMock(playerId, matchWeekId),
+}));
+
+vi.mock("../hooks/use-clubs", () => ({
+  useClubs: () => useClubsMock(),
 }));
 
 describe("PlayersPage", () => {
@@ -45,6 +50,11 @@ describe("PlayersPage", () => {
         mutateAsync: vi.fn(),
       },
     });
+    useClubsMock.mockReturnValue({
+      currentClubQuery: {
+        data: { id: "club-1", name: "Manchester United" },
+      },
+    });
     usePlayerDetailsMock.mockReturnValue({
       data: null,
       isLoading: false,
@@ -72,6 +82,16 @@ describe("PlayersPage", () => {
         },
         weeklyPerformance: null,
         matchWeek: null,
+        recentPerformanceSummary: {
+          matchesConsidered: 0,
+          totalMinutes: 0,
+          totalGoals: 0,
+          totalAssists: 0,
+          totalSaves: 0,
+          cleanSheets: 0,
+          averageRating: null,
+        },
+        recentPerformanceHistory: [],
       },
       isLoading: false,
       isError: false,

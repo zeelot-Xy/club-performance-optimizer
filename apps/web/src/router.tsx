@@ -52,27 +52,6 @@ const RequireActiveClub = () => {
   return <Outlet />;
 };
 
-const RequireNoActiveClub = () => {
-  const { currentClubQuery } = useClubs();
-
-  if (currentClubQuery.isLoading) {
-    return (
-      <div className="p-6">
-        <LoadingState
-          title="Checking workspace state"
-          description="Confirming whether a club is already active for this session."
-        />
-      </div>
-    );
-  }
-
-  if (currentClubQuery.data) {
-    return <Navigate to="/" replace />;
-  }
-
-  return <Outlet />;
-};
-
 export const router = createBrowserRouter([
   {
     path: "/login",
@@ -88,8 +67,7 @@ export const router = createBrowserRouter([
         children: [
           {
             path: "club-setup",
-            element: <RequireNoActiveClub />,
-            children: [{ index: true, element: <ClubSetupPage /> }],
+            element: <ClubSetupPage />,
           },
           {
             element: <RequireActiveClub />,

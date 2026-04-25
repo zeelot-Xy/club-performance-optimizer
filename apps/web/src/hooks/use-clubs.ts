@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { apiClient } from "../lib/api-client";
-import type { ApiClub, ApiClubSearchResult } from "../types/ui";
+import type { ApiClub, ApiClubImportResult, ApiClubSearchResult } from "../types/ui";
 
 const invalidateClubWorkspace = async (queryClient: ReturnType<typeof useQueryClient>) => {
   await Promise.all([
@@ -10,6 +10,8 @@ const invalidateClubWorkspace = async (queryClient: ReturnType<typeof useQueryCl
     queryClient.invalidateQueries({ queryKey: ["players"] }),
     queryClient.invalidateQueries({ queryKey: ["match-weeks"] }),
     queryClient.invalidateQueries({ queryKey: ["recommendations"] }),
+    queryClient.invalidateQueries({ queryKey: ["player-details"] }),
+    queryClient.invalidateQueries({ queryKey: ["weekly-performance"] }),
     queryClient.invalidateQueries({ queryKey: ["auth"] }),
   ]);
 };
@@ -38,7 +40,7 @@ export const useClubs = (searchTerm?: string) => {
 
   const importClub = useMutation({
     mutationFn: (payload: { provider: "football-data" | "thesportsdb"; externalClubId: string }) =>
-      apiClient.post<ApiClub>("/clubs/import", payload),
+      apiClient.post<ApiClubImportResult>("/clubs/import", payload),
     onSuccess: async () => {
       await invalidateClubWorkspace(queryClient);
     },
@@ -59,4 +61,3 @@ export const useClubs = (searchTerm?: string) => {
     activateClub,
   };
 };
-

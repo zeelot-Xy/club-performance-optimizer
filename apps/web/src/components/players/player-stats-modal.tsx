@@ -120,7 +120,8 @@ export const PlayerStatsModal = ({
           ) : null}
 
           {record ? (
-            <div className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">
+            <div className="space-y-5">
+              <div className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">
               <section className="space-y-4 rounded-[1.75rem] border border-[var(--color-border)] bg-white/72 p-5">
                 <div className="flex items-center justify-between gap-3">
                   <div>
@@ -198,6 +199,81 @@ export const PlayerStatsModal = ({
                   <EmptyState
                     title="No weekly stats recorded yet"
                     description="This player profile is available, but there are no weekly performance values to show for the selected context yet."
+                  />
+                )}
+              </section>
+              </div>
+
+              <section className="space-y-4 rounded-[1.75rem] border border-[var(--color-border)] bg-white/72 p-5">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-text-muted)]">
+                      Recent performance history
+                    </p>
+                    <p className="mt-2 text-lg font-semibold text-[var(--color-text-strong)]">
+                      {record.recentPerformanceSummary.matchesConsidered
+                        ? `${record.recentPerformanceSummary.matchesConsidered} recent match records imported`
+                        : "No recent history imported yet"}
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 text-sm text-[var(--color-text-muted)] sm:grid-cols-4">
+                    <div className="rounded-2xl bg-[rgba(15,44,34,0.04)] px-3 py-2">
+                      Goals: <span className="font-medium text-[var(--color-text-strong)]">{record.recentPerformanceSummary.totalGoals}</span>
+                    </div>
+                    <div className="rounded-2xl bg-[rgba(15,44,34,0.04)] px-3 py-2">
+                      Assists: <span className="font-medium text-[var(--color-text-strong)]">{record.recentPerformanceSummary.totalAssists}</span>
+                    </div>
+                    <div className="rounded-2xl bg-[rgba(15,44,34,0.04)] px-3 py-2">
+                      Minutes: <span className="font-medium text-[var(--color-text-strong)]">{record.recentPerformanceSummary.totalMinutes}</span>
+                    </div>
+                    <div className="rounded-2xl bg-[rgba(15,44,34,0.04)] px-3 py-2">
+                      Avg rating: <span className="font-medium text-[var(--color-text-strong)]">{record.recentPerformanceSummary.averageRating?.toFixed(1) ?? "N/A"}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {record.recentPerformanceHistory.length ? (
+                  <div className="grid gap-3">
+                    {record.recentPerformanceHistory.map((entry) => (
+                      <article
+                        key={entry.id}
+                        className="rounded-[1.3rem] border border-[var(--color-border)] bg-[rgba(15,44,34,0.03)] p-4"
+                      >
+                        <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                          <div>
+                            <p className="font-semibold text-[var(--color-text-strong)]">
+                              {entry.opponentName}
+                            </p>
+                            <p className="mt-1 text-sm text-[var(--color-text-muted)]">
+                              {entry.matchDate} | {entry.competition} | {entry.result}
+                            </p>
+                          </div>
+                          <div className="text-right text-sm text-[var(--color-text-muted)]">
+                            <p>{entry.minutes}</p>
+                            <p className="mt-1">Rating {entry.rating}</p>
+                          </div>
+                        </div>
+                        <div className="mt-4 grid gap-2 text-sm text-[var(--color-text-muted)] sm:grid-cols-4">
+                          <div className="rounded-2xl bg-white/70 px-3 py-2">
+                            Goals: <span className="font-medium text-[var(--color-text-strong)]">{entry.goals}</span>
+                          </div>
+                          <div className="rounded-2xl bg-white/70 px-3 py-2">
+                            Assists: <span className="font-medium text-[var(--color-text-strong)]">{entry.assists}</span>
+                          </div>
+                          <div className="rounded-2xl bg-white/70 px-3 py-2">
+                            {entry.defensiveNote}
+                          </div>
+                          <div className="rounded-2xl bg-white/70 px-3 py-2">
+                            {entry.discipline}
+                          </div>
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                ) : (
+                  <EmptyState
+                    title="No recent performance history yet"
+                    description="The imported club workspace does not yet have detailed recent-match statistics for this player."
                   />
                 )}
               </section>

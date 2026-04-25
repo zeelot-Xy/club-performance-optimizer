@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { CalendarClock, NotebookPen, Plus } from "lucide-react";
 
 import { MatchWeekForm } from "../components/forms/match-week-form";
@@ -8,12 +8,14 @@ import { LoadingState } from "../components/ui/loading-state";
 import { PageHeader } from "../components/ui/page-header";
 import { SectionCard } from "../components/ui/section-card";
 import { StatusBadge } from "../components/ui/status-badge";
+import { useClubs } from "../hooks/use-clubs";
 import { useMatchWeeks } from "../hooks/use-match-weeks";
 import { formatDate, mapApiMatchWeekToRecord, matchWeekStatusTone } from "../lib/formatters";
 import type { MatchWeekCreateInput } from "../types/ui";
 
 export const MatchWeeksPage = () => {
   const [showCreateForm, setShowCreateForm] = useState(false);
+  const { currentClubQuery } = useClubs();
   const { data, isLoading, isError, error, createMatchWeek } = useMatchWeeks();
 
   const matchWeeks = useMemo(() => (data ?? []).map(mapApiMatchWeekToRecord), [data]);
@@ -21,6 +23,10 @@ export const MatchWeeksPage = () => {
     matchWeeks.find((week) => week.status === "READY") ??
     matchWeeks.find((week) => week.status === "DRAFT") ??
     matchWeeks[0];
+
+  useEffect(() => {
+    setShowCreateForm(false);
+  }, [currentClubQuery.data?.id]);
 
   return (
     <div className="space-y-6">

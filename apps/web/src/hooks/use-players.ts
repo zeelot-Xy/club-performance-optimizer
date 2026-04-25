@@ -1,13 +1,17 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { apiClient } from "../lib/api-client";
+import { useClubs } from "./use-clubs";
 import type { ApiPlayer, PlayerCreateInput } from "../types/ui";
 
 export const usePlayers = () => {
   const queryClient = useQueryClient();
+  const { currentClubQuery } = useClubs();
+  const activeClubId = currentClubQuery.data?.id;
 
   const query = useQuery({
-    queryKey: ["players"],
+    queryKey: ["players", activeClubId ?? "no-club"],
+    enabled: Boolean(activeClubId),
     queryFn: () => apiClient.get<ApiPlayer[]>("/players"),
   });
 
